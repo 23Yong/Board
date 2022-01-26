@@ -16,4 +16,8 @@ public class MyPage {
 
     @OneToOne(fetch = LAZY, mappedBy = "myPage")
     Member member;
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
 }

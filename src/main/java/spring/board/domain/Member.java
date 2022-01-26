@@ -1,6 +1,6 @@
 package spring.board.domain;
 
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,6 +9,8 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
 
     @Id @GeneratedValue
@@ -27,6 +29,22 @@ public class Member {
     MyPage myPage;
 
     @OneToMany(mappedBy = "member")
-    private List<Post> post;
+    private List<Post> posts;
 
+    public void setMyPage(MyPage myPage) {
+        this.myPage = myPage;
+        myPage.setMember(this);
+    }
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.setMember(this);
+    }
+
+    @Builder
+    public Member(String userId, String password, String nickname) {
+        this.userId = userId;
+        this.password = password;
+        this.nickname = nickname;
+    }
 }
