@@ -3,6 +3,7 @@ package spring.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.board.domain.Member;
+import spring.board.domain.MyPage;
 import spring.board.exception.NoFindException;
 import spring.board.repository.MemberRepository;
 
@@ -16,18 +17,19 @@ public class MemberService {
 
     /**
      * 회원 가입
-     * @param member
-     * @return
      */
     public Long join(Member member) {
         // 중복 검사
         isDuplicatedMember(member);
 
+        MyPage myPage = new MyPage();
+        member.setMyPage(myPage);
+
         return memberRepository.save(member);
     }
 
     private void isDuplicatedMember(Member member) {
-        List<Member> members = memberRepository.findByMemberId(member.getLoginId());
+        List<Member> members = memberRepository.findByLoginId(member.getLoginId());
 
         if(!members.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
@@ -36,7 +38,6 @@ public class MemberService {
 
     /**
      * 회원 전체 목록 조회
-     * @return
      */
     public List<Member> findAll() {
         return memberRepository.findAll();
@@ -44,11 +45,9 @@ public class MemberService {
 
     /**
      * 아이디로 회원 조회
-     * @param id
-     * @return
      */
     public Member findByUserId(String id) {
-        List<Member> members = memberRepository.findByMemberId(id);
+        List<Member> members = memberRepository.findByLoginId(id);
 
         if(members.isEmpty()) {
             throw new NoFindException("찾으려는 회원이 없습니다.");
@@ -56,4 +55,5 @@ public class MemberService {
 
         return members.get(0);
     }
+
 }

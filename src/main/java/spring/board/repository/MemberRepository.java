@@ -2,7 +2,6 @@ package spring.board.repository;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import spring.board.domain.Member;
 
@@ -20,26 +19,23 @@ public class MemberRepository {
 
     public Long save(Member member) {
         em.persist(member);
+
         return member.getId();
     }
 
     public Member findOne(Long memberId) {
-        Member findMember = em.find(Member.class, memberId);
-        return findMember;
+        return em.find(Member.class, memberId);
     }
 
-    public List<Member> findByMemberId(String memberId) {
-        List members = em.createQuery("select m from Member m" +
+    public List<Member> findByLoginId(String loginId) {
+        return em.createQuery("select m from Member m" +
                         " where m.loginId = :memberId")
-                .setParameter("memberId", memberId)
+                .setParameter("memberId", loginId)
                 .getResultList();
-
-        return members;
     }
 
     public List<Member> findAll() {
-        List members = em.createQuery("select m from Member m")
+        return em.createQuery("select m from Member m")
                 .getResultList();
-        return members;
     }
 }

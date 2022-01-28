@@ -24,7 +24,7 @@ public class Member {
 
     private String nickname;
 
-    @OneToOne(fetch = LAZY)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "my_page_id")
     private MyPage myPage;
 

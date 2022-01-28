@@ -13,5 +13,4 @@ public class MyPage {
     @Id @GeneratedValue
     @Column(name = "my_page_id")
     private Long id;
-
 }
