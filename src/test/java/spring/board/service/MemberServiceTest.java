@@ -99,7 +99,7 @@ class MemberServiceTest {
 
     private Member createMember(String userID, String password, String nickname) {
         Member member = Member.builder()
-                .userId(userID)
+                .loginId(userID)
                 .password(password)
                 .nickname(nickname)
                 .build();

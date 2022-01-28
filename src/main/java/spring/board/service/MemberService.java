@@ -27,7 +27,7 @@ public class MemberService {
     }
 
     private void isDuplicatedMember(Member member) {
-        List<Member> members = memberRepository.findByMemberId(member.getUserId());
+        List<Member> members = memberRepository.findByMemberId(member.getLoginId());
 
         if(!members.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");

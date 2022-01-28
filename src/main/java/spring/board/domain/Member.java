@@ -17,8 +17,8 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "id", unique = true)
-    private String userId;
+    @Column(unique = true)
+    private String loginId;
 
     private String password;
 
@@ -26,14 +26,13 @@ public class Member {
 
     @OneToOne(fetch = LAZY)
     @JoinColumn(name = "my_page_id")
-    MyPage myPage;
+    private MyPage myPage;
 
     @OneToMany(mappedBy = "member")
     private List<Post> posts;
 
     public void setMyPage(MyPage myPage) {
         this.myPage = myPage;
-        myPage.setMember(this);
     }
 
     public void addPost(Post post) {
@@ -42,8 +41,8 @@ public class Member {
     }
 
     @Builder
-    public Member(String userId, String password, String nickname) {
-        this.userId = userId;
+    public Member(String loginId, String password, String nickname) {
+        this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
     }

@@ -30,7 +30,7 @@ public class MemberRepository {
 
     public List<Member> findByMemberId(String memberId) {
         List members = em.createQuery("select m from Member m" +
-                        " where m.userId = :memberId")
+                        " where m.loginId = :memberId")
                 .setParameter("memberId", memberId)
                 .getResultList();
 

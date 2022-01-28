@@ -77,7 +77,7 @@ class MemberRepositoryTest {
 
     private Member createMember(String memberId, String password, String nickname) {
         Member member = Member.builder()
-                .userId(memberId)
+                .loginId(memberId)
                 .password(password)
                 .nickname(nickname)
                 .build();
