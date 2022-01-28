@@ -1,5 +1,6 @@
 package spring.board.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -27,5 +28,19 @@ public class Post {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public Post() {}
+
+    @Builder
+    public Post(String title, String content, LocalDateTime createdTime) {
+        this.title = title;
+        this.content = content;
+        this.createdTime = createdTime;
+    }
+
+    public void changePost(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }
