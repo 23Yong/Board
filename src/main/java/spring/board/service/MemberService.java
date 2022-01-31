@@ -2,6 +2,7 @@ package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
 import spring.board.domain.MyPage;
 import spring.board.exception.NoFindException;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -18,6 +20,7 @@ public class MemberService {
     /**
      * 회원 가입
      */
+    @Transactional
     public Long join(Member member) {
         // 중복 검사
         isDuplicatedMember(member);

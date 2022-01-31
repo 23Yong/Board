@@ -1,5 +1,6 @@
 package spring.board.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +14,10 @@ import spring.board.service.PostService;
 import java.time.LocalDateTime;
 
 @Controller
+@RequiredArgsConstructor
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
     @GetMapping("/posts/new")
     public String createPostForm(Model model) {
