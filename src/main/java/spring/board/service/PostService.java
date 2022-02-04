@@ -19,7 +19,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     /**
-     * 게시글 등록
+     * 게시글 등록 (회원가입 필요)
      */
     @Transactional
     public Long registerPost(Long memberId, Post post) {
@@ -28,6 +28,14 @@ public class PostService {
 
         post.setMember(findMember);
 
+        return postRepository.save(post);
+    }
+
+    /**
+     * 게시글 등록 (회원가입 불필요 - 임시)
+     */
+    @Transactional
+    public Long registerPost(Post post) {
         return postRepository.save(post);
     }
 

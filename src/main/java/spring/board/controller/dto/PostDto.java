@@ -13,6 +13,7 @@ public class PostDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Data
     public static class PostInfo {
+        private Long postId;
         private String title;
         private LocalDateTime createDate;
     }

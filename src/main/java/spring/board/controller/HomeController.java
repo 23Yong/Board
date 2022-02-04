@@ -26,7 +26,7 @@ public class HomeController {
         List<PostDto.PostInfo> posts = postService.findAllPosts()
                 .stream()
                 .map(post ->
-                        new PostDto.PostInfo(post.getTitle(), post.getCreatedTime()))
+                        new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))
                 .collect(Collectors.toList());
 
         model.addAttribute("posts", posts);
