@@ -5,7 +5,10 @@
 </head>
 <body>
 <div class="container">
-    <form role="form" action="/home" th:object="${postForm}" method="post">
+    <div class="py-5 text-center">
+        <h3>게시물 등록</h3>
+    </div>
+    <form role="form" action="/posts/new" th:object="${postForm}" method="post">
         <div>
             <label for="title">제목</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요" />
@@ -14,8 +17,13 @@
             <label for="content">내용</label>
             <input type="text" id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력해주세요" />
         </div>
-        <input type="submit" class="btn btn-primary" value="등록" />
+
+        <div class="m-2">
+            <input type="submit" class="btn btn-primary" value="등록" />
+        </div>
     </form>
+
+    <footer th:replace="fragments/footer :: footer" />
 </div>
 </body>
 </html>

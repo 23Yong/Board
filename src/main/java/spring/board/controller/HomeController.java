@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.board.controller.dto.PostDto;
+import spring.board.controller.form.LoginForm;
 import spring.board.domain.Post;
 import spring.board.service.PostService;
 
@@ -31,5 +32,13 @@ public class HomeController {
 
         model.addAttribute("posts", posts);
         return "home";
+    }
+
+    @GetMapping("/login")
+    public String createLoginForm(Model model) {
+        LoginForm loginForm = new LoginForm();
+        model.addAttribute("loginForm", loginForm);
+
+        return "loginForm";
     }
 }

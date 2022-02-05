@@ -5,6 +5,9 @@
 </head>
 <body>
 <div class="container">
+    <div class="py-5 text-center">
+        <h3>회원 가입</h3>
+    </div>
     <form role="form" action="/members/new" th:object="${memberForm}" method="post">
         <div>
             <label for="loginId">아아디</label>
@@ -18,8 +21,18 @@
             <label for="nickname">닉네임</label>
             <input type="text" id="nickname" th:field="*{nickname}" class="form-control" placeholder="닉네임을 입력해주세요" />
         </div>
-        <input type="submit" class="btn btn-primary" value="등록" />
+        <div class="row mt-3">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg" type="submit">회원가입</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg" onclick="location.href='home.html'"
+                        th:onclick="|location.href='@{/}'|" type="button">취소</button>
+            </div>
+        </div>
     </form>
+
+    <footer th:replace="fragments/footer :: footer" />
 </div>
 </body>
 </html>
