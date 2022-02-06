@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import spring.board.controller.form.MemberForm;
@@ -26,7 +29,18 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String createMember(MemberForm memberForm) {
+    public String createMember(@Validated MemberForm memberForm, BindingResult bindingResult) {
+        if (memberForm.getLoginId() == null)
+            bindingResult.addError(new FieldError("member", "loginId", "로그인 아이디는 비어있을 수 없습니다."));
+        if (memberForm.getPassword() == null)
+            bindingResult.addError(new FieldError("member", "password", "비밀번호는 비어있을 수 없습니다."));
+        if (memberForm.getNickname() == null)
+            bindingResult.addError(new FieldError("member", "nickname", "닉네임은 비어있을 수 없습니다."));
+
+        if(bindingResult.hasErrors()) {
+            return "/members/createMemberForm";
+        }
+
         Member member = Member.builder()
                 .loginId(memberForm.getLoginId())
                 .password(memberForm.getPassword())

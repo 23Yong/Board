@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
@@ -16,10 +17,13 @@ public class Post {
     @Column(name = "post_id")
     private Long id;
 
+    @NotEmpty
     private String title;
 
+    @NotEmpty
     private String content;
 
+    @NotEmpty
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = LAZY)

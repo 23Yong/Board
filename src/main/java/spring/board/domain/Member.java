@@ -3,6 +3,7 @@ package spring.board.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -18,10 +19,13 @@ public class Member {
     private Long id;
 
     @Column(unique = true)
+    @NotEmpty
     private String loginId;
 
+    @NotEmpty
     private String password;
 
+    @NotEmpty
     private String nickname;
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
