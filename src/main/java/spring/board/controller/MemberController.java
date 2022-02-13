@@ -30,12 +30,6 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String createMember(@Validated MemberForm memberForm, BindingResult bindingResult) {
-        if (memberForm.getLoginId() == null)
-            bindingResult.addError(new FieldError("member", "loginId", "로그인 아이디는 비어있을 수 없습니다."));
-        if (memberForm.getPassword() == null)
-            bindingResult.addError(new FieldError("member", "password", "비밀번호는 비어있을 수 없습니다."));
-        if (memberForm.getNickname() == null)
-            bindingResult.addError(new FieldError("member", "nickname", "닉네임은 비어있을 수 없습니다."));
 
         if(bindingResult.hasErrors()) {
             return "/members/createMemberForm";

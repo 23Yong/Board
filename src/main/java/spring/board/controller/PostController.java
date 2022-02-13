@@ -1,13 +1,13 @@
 package spring.board.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import spring.board.controller.form.PostForm;
-import spring.board.domain.Member;
 import spring.board.domain.Post;
 import spring.board.service.PostService;
 
@@ -26,13 +26,10 @@ public class PostController {
     }
 
     @PostMapping("/posts/new")
-    public String createPost(PostForm postForm) {
-        // 임시 멤버 생성 -> 후에 현재 접속한 회원정보로 대체
-        Member member = Member.builder()
-                .loginId("tempLoginId")
-                .password("tempPassword")
-                .nickname("tempNickname")
-                .build();
+    public String createPost(@Validated PostForm postForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "posts/createPostForm";
+        }
 
         Post post = Post.builder()
                 .title(postForm.getTitle())
@@ -40,7 +37,7 @@ public class PostController {
                 .createdTime(LocalDateTime.now())
                 .build();
 
-        postService.registerPost(member.getId(), post);
+        postService.registerPost(post);
 
         return "redirect:/";
     }
