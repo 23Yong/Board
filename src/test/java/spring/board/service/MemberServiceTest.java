@@ -1,12 +1,11 @@
 package spring.board.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
-import spring.board.exception.NoFindException;
+import spring.board.exception.member.UserNotFoundException;
 import spring.board.repository.MemberRepository;
 
 import java.util.List;
@@ -94,7 +93,7 @@ class MemberServiceTest {
         // when
 
         // then
-        assertThrows(NoFindException.class, () -> memberService.findByUserId("userID3"));
+        assertThrows(UserNotFoundException.class, () -> memberService.findByUserId("userID3"));
     }
 
     private Member createMember(String userID, String password, String nickname) {

@@ -34,6 +34,14 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    public List<Member> findByLoginIdAndPassword(String loginId, String password) {
+        return em.createQuery("select m from Member m" +
+                " where m.loginId = :loginId and m.password = :password")
+                .setParameter("loginId", loginId)
+                .setParameter("password", password)
+                .getResultList();
+    }
+
     public List<Member> findAll() {
         return em.createQuery("select m from Member m")
                 .getResultList();

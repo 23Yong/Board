@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
 import spring.board.domain.MyPage;
-import spring.board.exception.NoFindException;
+import spring.board.exception.member.DuplicatedMemberException;
+import spring.board.exception.member.UserNotFoundException;
 import spring.board.repository.MemberRepository;
 
 import java.util.List;
@@ -35,7 +36,8 @@ public class MemberService {
         List<Member> members = memberRepository.findByLoginId(member.getLoginId());
 
         if(!members.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+
+            throw new DuplicatedMemberException("이미 존재하는 회원입니다.");
         }
     }
 
@@ -53,7 +55,7 @@ public class MemberService {
         List<Member> members = memberRepository.findByLoginId(id);
 
         if(members.isEmpty()) {
-            throw new NoFindException("찾으려는 회원이 없습니다.");
+            throw new UserNotFoundException("찾으려는 회원이 없습니다.");
         }
 
         return members.get(0);

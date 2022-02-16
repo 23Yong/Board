@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -56,6 +57,21 @@ class MemberRepositoryTest {
 
         // then
         assertThat(members.get(0)).isEqualTo(member1);
+    }
+
+    @Test
+    public void 회원_검색_아이디_패스워드() throws Exception {
+        // given
+        Member member = createMember("loginId", "password!", "nickname");
+        memberRepository.save(member);
+
+        // when
+        List<Member> members = memberRepository.findByLoginIdAndPassword("loginId", "password!");
+        List<Member> membersFail = memberRepository.findByLoginIdAndPassword("loginId", "password");
+
+        // then
+        assertThat(members.get(0)).isEqualTo(member);
+        assertThat(membersFail).hasSize(0);
     }
 
     @Test

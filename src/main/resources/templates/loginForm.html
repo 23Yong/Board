@@ -7,18 +7,24 @@
 <body>
     <div class="container">
         <div class="py-5 text-center">
-            <h2>회원 가입</h2>
+            <h2>로그인</h2>
         </div>
 
         <h4>회원 정보 입력</h4>
-        <form role="form" action="/" th:object="${loginForm}" method="post">
+        <form role="form" action="/login" th:object="${loginForm}" method="post">
             <div>
                 <label for="loginId"></label>
-                <input id="loginId" th:field="*{loginId}" class="form-control" placeholder="아이디를 입력해주세요" />
+                <input id="loginId" th:field="*{loginId}"
+                       th:errorclass="field-error"
+                       class="form-control" placeholder="아이디를 입력해주세요" />
+                <div class="field-error" th:errors="*{loginId}">아이디는 필수로 입력해주세요</div>
             </div>
             <div>
                 <label for="password"></label>
-                <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력해주세요" />
+                <input type="password" id="password" th:field="*{password}"
+                       th:errorclass="field-error"
+                       class="form-control" placeholder="비밀번호를 입력해주세요" />
+                <div class="field-error" th:errors="*{password}">비밀번호는 필수로 입력해주세요</div>
             </div>
             <div class="row mt-3">
                 <div class="col">

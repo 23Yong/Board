@@ -1,16 +1,14 @@
 package spring.board.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.dto.PostDto;
 import spring.board.controller.form.LoginForm;
-import spring.board.domain.Post;
+import spring.board.domain.Member;
 import spring.board.service.PostService;
 
 import java.util.List;
@@ -23,22 +21,19 @@ public class HomeController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home(@LoginCheck Member loginMember, Model model) {
         List<PostDto.PostInfo> posts = postService.findAllPosts()
                 .stream()
                 .map(post ->
                         new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))
                 .collect(Collectors.toList());
 
+
         model.addAttribute("posts", posts);
+        if (loginMember == null) {
+            return "home";
+        }
+        model.addAttribute("member", loginMember);
         return "home";
-    }
-
-    @GetMapping("/login")
-    public String createLoginForm(Model model) {
-        LoginForm loginForm = new LoginForm();
-        model.addAttribute("loginForm", loginForm);
-
-        return "loginForm";
     }
 }
