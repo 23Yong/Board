@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
 import spring.board.exception.member.CredentialException;
-import spring.board.exception.member.UserNotFoundException;
 import spring.board.repository.MemberRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,11 +15,9 @@ public class LoginService {
     private final MemberRepository memberRepository;
 
     public Member login(String loginId, String password) {
-        List<Member> members = memberRepository.findByLoginIdAndPassword(loginId, password);
+        Member member = memberRepository.findByLoginIdAndPassword(loginId, password)
+                .orElseThrow(() -> CredentialException.createCredentialException());
 
-        if (members.isEmpty()) {
-            throw new CredentialException("찾으려는 회원이 없습니다.");
-        }
-        return members.get(0);
+        return member;
     }
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
-import spring.board.domain.MyPage;
 import spring.board.exception.member.DuplicatedMemberException;
 import spring.board.exception.member.UserNotFoundException;
 import spring.board.repository.MemberRepository;
@@ -22,23 +21,13 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public Long join(Member member) {
-        // 중복 검사
-        isDuplicatedMember(member);
-
-        MyPage myPage = new MyPage();
-        member.setMyPage(myPage);
-
-        return memberRepository.save(member);
-    }
-
-    private void isDuplicatedMember(Member member) {
-        List<Member> members = memberRepository.findByLoginId(member.getLoginId());
-
-        if(!members.isEmpty()) {
-
-            throw new DuplicatedMemberException("이미 존재하는 회원입니다.");
+    public void join(Member member) {
+        if (memberRepository.existsByLoginId(member.getLoginId())) {
+            throw DuplicatedMemberException.createDuplicatedMemberException();
         }
+
+        member.addMyPage();
+        memberRepository.save(member);
     }
 
     /**
@@ -51,14 +40,11 @@ public class MemberService {
     /**
      * 아이디로 회원 조회
      */
-    public Member findByUserId(String id) {
-        List<Member> members = memberRepository.findByLoginId(id);
+    public Member findByLoginId(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
 
-        if(members.isEmpty()) {
-            throw new UserNotFoundException("찾으려는 회원이 없습니다.");
-        }
-
-        return members.get(0);
+        return member;
     }
 
 }

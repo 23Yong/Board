@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import spring.board.common.annotation.LoginCheck;
+import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.PostDto;
 import spring.board.controller.form.LoginForm;
 import spring.board.domain.Member;
@@ -33,7 +34,13 @@ public class HomeController {
         if (loginMember == null) {
             return "home";
         }
-        model.addAttribute("member", loginMember);
+
+        MemberDto.LoginMember member = MemberDto.LoginMember.builder()
+                                        .loginId(loginMember.getLoginId())
+                                        .nickname(loginMember.getNickname())
+                                        .build();
+
+        model.addAttribute("member", member);
         return "home";
     }
 }
