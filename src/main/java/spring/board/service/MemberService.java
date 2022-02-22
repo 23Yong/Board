@@ -1,6 +1,9 @@
 package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
@@ -28,13 +31,6 @@ public class MemberService {
 
         member.addMyPage();
         memberRepository.save(member);
-    }
-
-    /**
-     * 회원 전체 목록 조회
-     */
-    public List<Member> findAll() {
-        return memberRepository.findAll();
     }
 
     /**

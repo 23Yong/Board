@@ -1,14 +1,13 @@
 package spring.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.PostDto;
-import spring.board.controller.form.LoginForm;
 import spring.board.domain.Member;
 import spring.board.service.PostService;
 
@@ -22,8 +21,8 @@ public class HomeController {
     private final PostService postService;
 
     @GetMapping("/")
-    public String home(@LoginCheck Member loginMember, Model model) {
-        List<PostDto.PostInfo> posts = postService.findAllPosts()
+    public String home(@LoginCheck Member loginMember, Model model, Pageable pageable) {
+        List<PostDto.PostInfo> posts = postService.findAllPosts(pageable)
                 .stream()
                 .map(post ->
                         new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))

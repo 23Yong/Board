@@ -1,106 +1,151 @@
 package spring.board.service;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import spring.board.domain.Member;
 import spring.board.domain.Post;
+import spring.board.exception.post.PostNotFoundException;
+import spring.board.repository.MemberRepository;
+import spring.board.repository.PostRepository;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
-@SpringBootTest
-@Transactional
+@ExtendWith(MockitoExtension.class)
 class PostServiceTest {
 
-    @Autowired PostService postService;
-    @Autowired MemberService memberService;
+    @Mock
+    private PostRepository postRepository;
+    @Mock
+    private MemberRepository memberRepository;
+
+    @InjectMocks
+    PostService postService;
 
     @Test
-    public void 게시글_작성() throws Exception {
+    public void 게시글_작성() {
         // given
-        Member member = createMember("userID", "password", "nickname");
-        Post post = createPost("title", "content");
-
-        Long memberId = memberService.join(member);
+        Member member = createMember();
+        Post post = createPost();
+        given(memberRepository.findByLoginId(member.getLoginId())).willReturn(Optional.of(member));
+        given(postRepository.save(post)).willReturn(post);
 
         // when
-        Long postId = postService.registerPost(memberId, post);
+        postService.registerPost(member.getLoginId(), post);
 
         // then
-        assertThat(postId).isEqualTo(post.getId());
+        then(postRepository).should(times(1)).save(post);
+        then(memberRepository).should(times(1)).findByLoginId(member.getLoginId());
     }
 
+    @DisplayName("게시글 아이디를 통해 게시글을 조회한다.")
     @Test
-    public void 게시글_조회() throws Exception {
+    public void 게시글_조회() {
         // given
-        Member member = createMember("userID", "password", "nickname");
-        Post post = createPost("title", "content");
-
-        Long memberId = memberService.join(member);
-        Long postId = postService.registerPost(memberId, post);
+        Post post = createPost();
+        given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
         // when
-        Post findPost = postService.findPost(postId);
+        Post findPost = postService.findPost(1L);
 
         // then
         assertThat(findPost).isEqualTo(post);
+        then(postRepository).should(times(1)).findById(1L);
+    }
+
+    @DisplayName("게시글 아이디가 없어 게시글 조회가 실패한다.")
+    @Test
+    public void 게시글_조회_실패() {
+        // given
+        // when
+        // then
+        assertThrows(PostNotFoundException.class, () -> postService.findPost(1L));
     }
 
     @Test
-    public void 게시글_전체_조회() throws Exception {
+    public void 게시글_전체_조회() {
         // given
-        Member member = createMember("userID", "password", "nickname");
-        Post post1 = createPost("title", "content");
-        Post post2 = createPost("title2", "content");
-
-        Long memberId = memberService.join(member);
-        Long postId1 = postService.registerPost(memberId, post1);
-        Long postId2 = postService.registerPost(memberId, post2);
+        List<Post> posts = savePosts();
+        int totalSize = posts.size();
+        PageRequest page = PageRequest.of(0, 10);
+        Page<Post> result = new PageImpl<>(posts, page, totalSize);
+        given(postRepository.findAll(page)).willReturn(result);
 
         // when
-        List<Post> findPosts = postService.findAllPosts();
+        Page<Post> allPosts = postService.findAllPosts(page);
 
         // then
-        assertThat(findPosts.get(0)).isEqualTo(post1);
-        assertThat(findPosts.get(1)).isEqualTo(post2);
+        assertThat(result.getSize()).isEqualTo(allPosts.getSize());
+        assertThat(result.getTotalElements()).isEqualTo(100);
+        assertThat(result.getTotalPages()).isEqualTo(10);
     }
 
     @Test
-    public void 게시글_수정() throws Exception {
+    public void 게시글_수정() {
         // given
-        Member member = createMember("userID", "password", "nickname");
-        Post post = createPost("title", "content");
-
-        Long memberId = memberService.join(member);
-        Long postId = postService.registerPost(memberId, post);
+        Post post = createPost();
+        given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
         // when
-        postService.updatePost(postId, "title", "changedContent");
+        postService.updatePost(1L, "changed title", "changed content");
 
         // then
-        assertThat(post.getContent()).isEqualTo("changedContent");
+        assertThat(post.getTitle()).isEqualTo("changed title");
+        assertThat(post.getContent()).isEqualTo("changed content");
     }
 
-    private Member createMember(String userID, String password, String nickname) {
+    private Member createMember() {
         Member member = Member.builder()
-                .loginId(userID)
-                .password(password)
-                .nickname(nickname)
+                .loginId("userID")
+                .password("password")
+                .nickname("nickname")
                 .build();
         return member;
     }
 
-    private Post createPost(String title, String content) {
+    private Post createPost() {
         Post post = Post.builder()
-                .title(title)
-                .content(content)
+                .title("title")
+                .content("content")
                 .createdTime(LocalDateTime.now())
                 .build();
+
         return post;
+    }
+
+    private List<Post> savePosts() {
+        Member member = createMember();
+        List<Post> posts = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            Post post = Post.builder()
+                    .title("title" + i)
+                    .content("content" + i)
+                    .createdTime(LocalDateTime.now())
+                    .build();
+
+            posts.add(post);
+        }
+
+        return posts;
     }
 }

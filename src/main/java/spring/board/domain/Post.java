@@ -23,7 +23,6 @@ public class Post {
     @NotEmpty
     private String content;
 
-    @NotEmpty
     private LocalDateTime createdTime;
 
     @ManyToOne(fetch = LAZY)
