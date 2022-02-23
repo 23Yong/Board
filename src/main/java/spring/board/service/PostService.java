@@ -2,18 +2,16 @@ package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.Member;
 import spring.board.domain.Post;
-import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.post.PostNotFoundException;
 import spring.board.repository.MemberRepository;
 import spring.board.repository.PostRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +46,8 @@ public class PostService {
      * 게시글 전체 조회
      */
     public Page<Post> findAllPosts(Pageable pageable) {
+        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
+        pageable = PageRequest.of(page, 10);
         return postRepository.findAll(pageable);
     }
 

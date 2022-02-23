@@ -1,6 +1,7 @@
 package spring.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.PostDto;
 import spring.board.domain.Member;
+import spring.board.domain.Post;
 import spring.board.service.PostService;
 
 import java.util.List;
@@ -22,14 +24,14 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(@LoginCheck Member loginMember, Model model, Pageable pageable) {
-        List<PostDto.PostInfo> posts = postService.findAllPosts(pageable)
+        Page<Post> posts = postService.findAllPosts(pageable);
+        List<PostDto.PostInfo> postInfoList = posts.getContent()
                 .stream()
-                .map(post ->
-                        new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))
+                .map(post -> new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))
                 .collect(Collectors.toList());
 
-
-        model.addAttribute("posts", posts);
+        model.addAttribute("posts", postInfoList);
+        model.addAttribute("postPage", posts);
         if (loginMember == null) {
             return "home";
         }
