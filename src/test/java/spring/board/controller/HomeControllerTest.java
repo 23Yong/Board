@@ -38,32 +38,5 @@ class HomeControllerTest {
     MemberService memberService;
 
 
-    @Test
-    public void 게시글_전체_조회() throws Exception {
-        // given
-        Member member = Member.builder()
-                .loginId("loginId1")
-                .password("password1")
-                .nickname("nickname1")
-                .build();
 
-        List<Post> posts = new ArrayList<>();
-        Post post = Post.builder()
-                .title("title1")
-                .content("content")
-                .createdTime(LocalDateTime.now())
-                .build();
-
-        posts.add(post);
-
-        // when
-        memberService.join(member);
-        postService.registerPost(member.getId(), post);
-
-        // then
-        BDDMockito.given(postService.findAllPosts()).willReturn(posts);
-        mvc.perform(MockMvcRequestBuilders.get("/"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("title1")));
-    }
 }

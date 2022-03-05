@@ -27,7 +27,11 @@ public class HomeController {
         Page<Post> posts = postService.findAllPosts(pageable);
         List<PostDto.PostInfo> postInfoList = posts.getContent()
                 .stream()
-                .map(post -> new PostDto.PostInfo(post.getId(), post.getTitle(), post.getCreatedTime()))
+                .map(post -> PostDto.PostInfo.builder()
+                        .postId(post.getId())
+                        .title(post.getTitle())
+                        .createdDate(post.getCreatedTime())
+                        .build())
                 .collect(Collectors.toList());
 
         model.addAttribute("posts", postInfoList);
@@ -37,9 +41,9 @@ public class HomeController {
         }
 
         MemberDto.LoginMember member = MemberDto.LoginMember.builder()
-                                        .loginId(loginMember.getLoginId())
-                                        .nickname(loginMember.getNickname())
-                                        .build();
+                .loginId(loginMember.getLoginId())
+                .nickname(loginMember.getNickname())
+                .build();
 
         model.addAttribute("member", member);
         return "home";
