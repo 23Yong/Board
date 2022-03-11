@@ -17,7 +17,7 @@
             <a class="btn btn-primary float-end mx-lg-2" href="/login">로그인</a>
         </div>
         <div th:if="${#request.getSession(false)}">
-            <a class="btn btn-primary float-end mx-lg-2" href="/members">마이 페이지</a>
+            <a class="btn btn-primary float-end mx-lg-2" th:href="@{members/{loginId}/myPage(loginId = ${member.loginId})}">마이 페이지</a>
             <form action="/logout" method="post">
                 <button class="btn btn-primary float-end mx-lg-2">로그아웃</button>
             </form>

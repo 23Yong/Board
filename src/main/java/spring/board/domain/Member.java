@@ -44,6 +44,14 @@ public class Member {
         post.setMember(this);
     }
 
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     @Builder
     public Member(String loginId, String password, String nickname) {
         this.loginId = loginId;
