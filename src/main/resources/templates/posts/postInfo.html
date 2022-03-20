@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<div class="container">
+    <div class="py-5 title">
+        <h3>게시판</h3>
+    </div>
+
+
+    <div th:object="${postInfo}">
+        <div class="row">
+            <div class="col">
+                제목: <h5 th:text="*{title}"></h5>
+            </div>
+            <div class="col">
+                작성자: <h5 th:text="*{postMemberInfo.nickname}"></h5>
+            </div>
+        </div>
+        <div>
+            내용: <span th:text="*{content}"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <button class="col btn btn-primary w-100" th:onclick="|location.href='@{/posts/{postId}/edit(postId = ${postInfo.postId})}'|">게시글 수정하기</button>
+        <button class="col btn btn-secondary w-100" th:onclick="|location.href='@{/}'|">홈으로</button>
+    </div>
+</div>
+</body>
+</html>
