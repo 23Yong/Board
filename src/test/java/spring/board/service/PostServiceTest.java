@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import spring.board.controller.dto.PostDto;
 import spring.board.domain.Member;
 import spring.board.domain.Post;
 import spring.board.exception.post.PostNotFoundException;
@@ -104,13 +105,18 @@ class PostServiceTest {
         // given
         Post post = createPost();
         given(postRepository.findById(1L)).willReturn(Optional.of(post));
+        PostDto.PostEditRequest request = PostDto.PostEditRequest.builder()
+                .postId(1L)
+                .title("edit title")
+                .content("edit content")
+                .build();
 
         // when
-        postService.updatePost(1L, "changed title", "changed content");
+        postService.updatePost(request);
 
         // then
-        assertThat(post.getTitle()).isEqualTo("changed title");
-        assertThat(post.getContent()).isEqualTo("changed content");
+        assertThat(post.getTitle()).isEqualTo("edit title");
+        assertThat(post.getContent()).isEqualTo("edit content");
     }
 
     private Member createMember() {

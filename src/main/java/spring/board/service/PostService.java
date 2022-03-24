@@ -7,11 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.board.controller.dto.PostDto;
 import spring.board.domain.Member;
 import spring.board.domain.Post;
 import spring.board.exception.post.PostNotFoundException;
 import spring.board.repository.MemberRepository;
 import spring.board.repository.PostRepository;
+
+import static spring.board.controller.dto.PostDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -55,10 +58,10 @@ public class PostService {
      * 게시글 수정
      */
     @Transactional
-    public void updatePost(Long postId, String title, String content) {
-        Post findPost = postRepository.findById(postId)
+    public void updatePost(PostEditRequest request) {
+        Post findPost = postRepository.findById(request.getPostId())
                 .orElseThrow();
 
-        findPost.changePost(title, content);
+        findPost.changePost(request.getTitle(), request.getContent());
     }
 }

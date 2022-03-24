@@ -74,4 +74,16 @@ public class MemberDto {
             this.nickname = nickname;
         }
     }
+
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Getter
+    public static class PostMemberInfo {
+
+        private String nickname;
+
+        @Builder
+        public PostMemberInfo(String nickname) {
+            this.nickname = nickname;
+        }
+    }
 }
