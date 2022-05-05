@@ -2,43 +2,47 @@ package spring.board.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.PostDto;
+import spring.board.controller.dto.ReplyDto;
 import spring.board.controller.form.PostEditForm;
 import spring.board.controller.form.PostForm;
+import spring.board.controller.form.ReplyForm;
 import spring.board.domain.Member;
 import spring.board.domain.Post;
 import spring.board.exception.member.UnauthenticatedUserException;
 import spring.board.service.PostService;
+import spring.board.service.ReplyService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 import static spring.board.controller.dto.MemberDto.*;
 import static spring.board.controller.dto.PostDto.*;
+import static spring.board.controller.dto.ReplyDto.*;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
+    private final ReplyService replyService;
 
-    @GetMapping("/posts/new")
+    @GetMapping("/new")
     public String createPostForm(@ModelAttribute(name = "postForm") PostForm postForm) {
         return "posts/createPostForm";
     }
 
-    @PostMapping("/posts/new")
+    @PostMapping("/new")
     public String createPost(@Validated PostForm postForm, BindingResult bindingResult, @LoginCheck Member member) {
         if (bindingResult.hasErrors()) {
             return "posts/createPostForm";
@@ -61,8 +65,8 @@ public class PostController {
         return "redirect:/";
     }
 
-    @GetMapping("/posts/{postId}")
-    public String getPostInfo(@PathVariable Long postId, Model model) {
+    @GetMapping("/{postId}")
+    public String getPostInfo(@PathVariable Long postId, Model model, Pageable pageable) {
         Post findPost = postService.findPost(postId);
         Member findPostMember = findPost.getMember();
 
@@ -78,15 +82,16 @@ public class PostController {
                 .build();
 
         model.addAttribute("postInfo", postDetailRequest);
+        model.addAttribute("replies", replyService.findAllReplies(pageable));
         return "posts/postInfo";
     }
 
-    @GetMapping("/posts/{postId}/edit")
+    @GetMapping("/{postId}/edit")
     public String createPostEditForm(@ModelAttribute(name = "postForm") PostEditForm postEditForm) {
         return "posts/createPostEditForm";
     }
 
-    @PostMapping("posts/{postId}/edit")
+    @PostMapping("/{postId}/edit")
     public String editPostInfo(@PathVariable Long postId,
                                @Valid @ModelAttribute(name = "postForm") PostEditForm postEditForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

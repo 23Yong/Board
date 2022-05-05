@@ -13,10 +13,13 @@
     <div th:object="${postInfo}">
         <div class="row">
             <div class="col">
+                번호: <h5 th:text="*{postId}" id="id"></h5>
+            </div>
+            <div class="col">
                 제목: <h5 th:text="*{title}"></h5>
             </div>
             <div class="col">
-                작성자: <h5 th:text="*{postMemberInfo.nickname}"></h5>
+                작성자: <h5 th:text="*{postMemberInfo.nickname}" id="nickname"></h5>
             </div>
         </div>
         <div>
@@ -24,10 +27,39 @@
         </div>
     </div>
 
+    <div class="modal-content">
+        <div class="card card-body">
+            <!-- 댓글 작성 -->
+            <form>
+                <div class="row reply_write">
+                    <div class="col-8">
+                        <label for="content"></label>
+                        <input class="w-100 form-control" id="content"
+                               type="text" placeholder="댓글입력...">
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-success mb-1" id="write-reply">댓글&nbsp;달기</button>
+                    </div>
+                </div>
+            </form>
+            <!-- 댓글 목록 -->
+            <div class="reply-list">
+                <ul th:each="reply : ${replies}">
+                    <span th:text="${reply.content}"></span>
+                    <span th:text="${reply.updatedTime}"></span>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         <button class="col btn btn-primary w-100" th:onclick="|location.href='@{/posts/{postId}/edit(postId = ${postInfo.postId})}'|">게시글 수정하기</button>
         <button class="col btn btn-secondary w-100" th:onclick="|location.href='@{/}'|">홈으로</button>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/reply.js"></script>
 </body>
 </html>

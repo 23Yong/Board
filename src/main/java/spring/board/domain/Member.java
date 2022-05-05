@@ -35,6 +35,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "writer")
+    private List<Reply> replies;
+
     public void addMyPage() {
         this.myPage = new MyPage();
     }
