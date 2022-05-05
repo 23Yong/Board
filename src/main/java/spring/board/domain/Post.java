@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -29,6 +30,9 @@ public class Post {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "post")
+    private List<Reply> replies;
+
     public void setMember(Member member) {
         this.member = member;
     }
@@ -45,5 +49,9 @@ public class Post {
     public void changePost(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
     }
 }

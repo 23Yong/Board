@@ -38,5 +38,5 @@ out/
 
 ### BootStrap ###
 *.css
-*.js
+bootstrap.*
 *.map
