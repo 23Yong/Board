@@ -1,26 +1,40 @@
 package spring.board.controller.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
-import spring.board.controller.dto.ReplyDto;
-import spring.board.controller.form.ReplyForm;
-import spring.board.domain.Member;
+import spring.board.controller.dto.PostDto;
+import spring.board.domain.member.Member;
 import spring.board.service.PostService;
 import spring.board.service.ReplyService;
 
-import javax.validation.Valid;
-
+import static spring.board.controller.dto.PostDto.*;
 import static spring.board.controller.dto.ReplyDto.*;
 
 
 @RequiredArgsConstructor
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 @RestController
 public class PostApiController {
 
+    private final PostService postService;
     private final ReplyService replyService;
+
+    @PostMapping("/new")
+    public Long save(@RequestBody PostSaveRequest requestDto,
+                    @LoginCheck Member member) {
+        return postService.save(requestDto, member.getNickname());
+    }
+
+    @PutMapping("/{id}")
+    public Long update(@RequestBody PostUpdateRequest requestDto) {
+        return postService.update(requestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public Long delete(@PathVariable Long id) {
+        return postService.delete(id);
+    }
 
     @PostMapping("/{postId}/reply")
     public Long writeReply(@RequestBody ReplySaveRequest request) {

@@ -1,7 +1,7 @@
 package spring.board.controller.dto;
 
 import lombok.*;
-import spring.board.domain.Reply;
+import spring.board.domain.reply.Reply;
 
 import java.time.LocalDateTime;
 

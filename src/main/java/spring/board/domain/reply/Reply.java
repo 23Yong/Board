@@ -1,7 +1,8 @@
-package spring.board.domain;
+package spring.board.domain.reply;
 
 import lombok.*;
-import spring.board.controller.dto.ReplyDto;
+import spring.board.domain.member.Member;
+import spring.board.domain.post.Post;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

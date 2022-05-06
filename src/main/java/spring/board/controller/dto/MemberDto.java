@@ -1,21 +1,28 @@
 package spring.board.controller.dto;
 
 import lombok.*;
-import spring.board.domain.Member;
+import spring.board.domain.member.Member;
 
 public class MemberDto {
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class LoginMember {
+    public static class MemberInfo {
 
         private String loginId;
         private String nickname;
 
         @Builder
-        public LoginMember (String loginId, String nickname) {
+        public MemberInfo(String loginId, String nickname) {
             this.loginId = loginId;
             this.nickname = nickname;
+        }
+
+        public Member toEntity() {
+            return Member.builder()
+                    .loginId(loginId)
+                    .nickname(nickname)
+                    .build();
         }
     }
 

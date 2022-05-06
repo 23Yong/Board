@@ -6,11 +6,11 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.MemberDto.ChangePasswordRequest;
 import spring.board.controller.dto.MemberDto.SaveRequest;
-import spring.board.domain.Member;
+import spring.board.domain.member.Member;
 import spring.board.exception.member.DuplicatedMemberException;
 import spring.board.exception.member.UnauthenticatedUserException;
 import spring.board.exception.member.UserNotFoundException;
-import spring.board.repository.MemberRepository;
+import spring.board.domain.member.MemberRepository;
 
 @Service
 @RequiredArgsConstructor

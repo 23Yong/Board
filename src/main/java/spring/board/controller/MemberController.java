@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import spring.board.controller.form.MemberEditForm;
 import spring.board.controller.form.MemberForm;
 import spring.board.controller.form.PasswordEditForm;
-import spring.board.domain.Member;
+import spring.board.domain.member.Member;
 import spring.board.service.MemberService;
 
 import javax.validation.Valid;
@@ -50,7 +50,7 @@ public class MemberController {
     @GetMapping("members/{loginId}/myPage")
     public String myPage(@PathVariable String loginId, Model model) {
         Member findMember = memberService.findByLoginId(loginId);
-        LoginMember member = LoginMember.builder()
+        MemberInfo member = MemberInfo.builder()
                 .loginId(findMember.getLoginId())
                 .nickname(findMember.getNickname())
                 .build();
