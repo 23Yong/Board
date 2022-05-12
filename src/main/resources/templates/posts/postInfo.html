@@ -11,15 +11,16 @@
 
 
     <div th:object="${postInfo}">
-        <div class="row">
-            <div class="col">
-                번호: <h5 th:text="*{postId}" id="id"></h5>
+        <div class="row mb-4">
+            <div class="collapse">
+                <label for="id"></label>
+                <input th:value="*{postId}" id="id" readonly />
             </div>
             <div class="col">
-                제목: <h5 th:text="*{title}"></h5>
+                제목: <span th:text="*{title}"></span>
             </div>
             <div class="col">
-                작성자: <h5 th:text="*{postMemberInfo.nickname}" id="nickname"></h5>
+                작성자: <span th:text="*{postMemberInfo.nickname}" id="nickname"></span>
             </div>
         </div>
         <div>
@@ -27,14 +28,14 @@
         </div>
     </div>
 
-    <div class="modal-content">
+    <div class="modal-content mt-4">
         <div class="card card-body">
             <!-- 댓글 작성 -->
             <form>
                 <div class="row reply_write">
                     <div class="col-8">
                         <label for="content"></label>
-                        <input class="w-100 form-control" id="content"
+                        <input class="w-100 form-control mb-1" id="content"
                                type="text" placeholder="댓글입력...">
                     </div>
                     <div class="col-3">
@@ -54,12 +55,16 @@
 
 
     <div class="row">
-        <button class="col btn btn-primary w-100" th:onclick="|location.href='@{/posts/{postId}/edit(postId = ${postInfo.postId})}'|">게시글 수정하기</button>
-        <button class="col btn btn-secondary w-100" th:onclick="|location.href='@{/}'|">홈으로</button>
+        <a th:href="|@{/posts/{postId}/edit(postId = ${postInfo.postId})}|"
+                role="button" class="col btn btn-primary w-100 m-3">게시글 수정하기</a>
+        <button class="col btn btn-danger w-100 m-3" id="btn-delete">삭제</button>
+        <a href="/"
+                role="button" class="col btn btn-secondary w-100 m-3">홈으로</a>
     </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/js/post.js"></script>
 <script src="/js/reply.js"></script>
 </body>
 </html>

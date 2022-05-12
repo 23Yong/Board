@@ -6,12 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.MemberDto.SaveRequest;
-import spring.board.domain.Member;
+import spring.board.domain.member.Member;
 import spring.board.exception.member.DuplicatedMemberException;
 import spring.board.exception.member.UserNotFoundException;
-import spring.board.repository.MemberRepository;
+import spring.board.domain.member.MemberRepository;
 
 import java.util.Optional;
 

@@ -6,16 +6,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.board.controller.dto.ReplyDto;
-import spring.board.domain.Member;
-import spring.board.domain.Post;
-import spring.board.domain.Reply;
+import spring.board.domain.member.Member;
+import spring.board.domain.post.Post;
+import spring.board.domain.reply.Reply;
 import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.post.PostNotFoundException;
 import spring.board.exception.reply.ReplyNotFoundException;
-import spring.board.repository.MemberRepository;
-import spring.board.repository.PostRepository;
-import spring.board.repository.ReplyRepository;
+import spring.board.domain.member.MemberRepository;
+import spring.board.domain.post.PostRepository;
+import spring.board.domain.reply.ReplyRepository;
 
 import static spring.board.controller.dto.ReplyDto.*;
 
