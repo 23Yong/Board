@@ -73,7 +73,7 @@ public class PostDto {
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class PostDetailRequest {
+    public static class PostDetailInfo {
 
         private Long postId;
         private String title;
@@ -81,7 +81,7 @@ public class PostDto {
         private PostMemberInfo postMemberInfo;
 
         @Builder
-        public PostDetailRequest(Long postId, String title, String content, PostMemberInfo postMemberInfo) {
+        public PostDetailInfo(Long postId, String title, String content, PostMemberInfo postMemberInfo) {
             this.postId = postId;
             this.title = title;
             this.content = content;
