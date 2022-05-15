@@ -79,7 +79,7 @@ public class PostDto {
         private PostMemberInfo postMemberInfo;
 
         @Builder
-        public PostDetailInfo(Long postId, String title, String content, PostMemberInfo postMemberInfo) {
+        public PostDetailRequest(Long postId, String title, String content, PostMemberInfo postMemberInfo) {
             this.postId = postId;
             this.title = title;
             this.content = content;
