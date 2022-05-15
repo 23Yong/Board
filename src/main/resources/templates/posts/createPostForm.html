@@ -16,13 +16,14 @@
         <div class="m-1">
             <label for="content">내용</label>
             <textarea type="text"
-                    id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력해주세요" required/>
+                      id="content" th:field="*{content}" class="form-control" placeholder="내용을 입력해주세요" required/>
         </div>
     </form>
-    <a href="/" role="button" class="btn btn-secondary">취소</a>
-    <button type="button" class="btn btn-primary"
-            id="btn-save">등록</button>
-
+    <div>
+        <a href="/" role="button" class="btn btn-secondary">취소</a>
+        <button type="button" class="btn btn-primary"
+                id="btn-save">등록</button>
+    </div>
     <footer th:replace="fragments/footer :: footer" />
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>

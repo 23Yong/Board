@@ -1,20 +1,20 @@
 package spring.board.domain.reply;
 
 import lombok.*;
+import spring.board.domain.BaseTimeEntity;
 import spring.board.domain.member.Member;
 import spring.board.domain.post.Post;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 import static javax.persistence.FetchType.*;
 import static spring.board.controller.dto.ReplyDto.*;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Reply {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+public class Reply extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -22,10 +22,6 @@ public class Reply {
     private Long id;
 
     private String content;
-
-    private LocalDateTime createdTime;
-
-    private LocalDateTime updatedTime;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
@@ -36,31 +32,18 @@ public class Reply {
     private Post post;
 
     @Builder
-    public Reply(Long id, String content, LocalDateTime createdTime, LocalDateTime updatedTime) {
+    public Reply(Long id, String content) {
         this.id = id;
         this.content = content;
-        this.createdTime = createdTime;
-        this.updatedTime = updatedTime;
     }
-
-    public ReplyResponse toReplyResponse() {
-        return ReplyResponse.builder()
-                .id(this.id)
-                .content(this.content)
-                .updatedTime(this.updatedTime)
-                .build();
-    }
-
 
     public void addWriter(Member writer) {
         this.writer = writer;
     }
-
     public void addPost(Post post) {
         post.addReply(this);
         this.post = post;
     }
-
     public void editReply(String content) {
         this.content = content;
     }
