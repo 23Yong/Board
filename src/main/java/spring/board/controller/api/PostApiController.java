@@ -36,18 +36,8 @@ public class PostApiController {
         return postService.delete(id);
     }
 
-    @PostMapping("/{id}/reply")
-    public Long writeReply(@RequestBody ReplySaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
-        return replyService.save(request, id, member);
-    }
-
-    @PutMapping("/{id}/reply")
-    public Long updateReply(@RequestBody ReplyUpdateRequest request) {
-        return replyService.update(request);
-    }
-
-    @DeleteMapping("/{id}/reply")
-    public Long deleteReply(@RequestBody ReplyDeleteRequest request) {
-        return replyService.delete(request);
+    @PostMapping("/{postId}/reply")
+    public Long writeReply(@RequestBody ReplySaveRequest request) {
+        return replyService.registerReply(request);
     }
 }

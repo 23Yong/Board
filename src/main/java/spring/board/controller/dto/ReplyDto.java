@@ -1,8 +1,6 @@
 package spring.board.controller.dto;
 
 import lombok.*;
-import spring.board.domain.member.Member;
-import spring.board.domain.post.Post;
 import spring.board.domain.reply.Reply;
 
 import java.time.LocalDateTime;
@@ -11,67 +9,75 @@ public class ReplyDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ReplyRequest {
+
+        private Long id;
+
+        private String content;
+        private Long memberId;
+        private Long postId;
+
+        @Builder
+        public ReplyRequest(Long id, String content, Long memberId, Long postId) {
+            this.id = id;
+            this.content = content;
+            this.memberId = memberId;
+            this.postId = postId;
+        }
+
+        public Reply toEntity() {
+            return Reply.builder()
+                    .id(this.id)
+                    .content(this.content)
+                    .createdTime(LocalDateTime.now())
+                    .updatedTime(LocalDateTime.now())
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ReplySaveRequest {
 
-        private String content;
-
-        @Builder
-        public ReplySaveRequest(String content) {
-            this.content = content;
-        }
-
-        public Reply toEntity(Post post, Member member) {
-             Reply reply = Reply.builder()
-                    .content(content)
-                    .build();
-
-             reply.addPost(post);
-             reply.addWriter(member);
-             return reply;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyUpdateRequest {
-
-        private Long id;
-        private String content;
-
-        @Builder
-        public ReplyUpdateRequest(Long id, String content) {
-            this.id = id;
-            this.content = content;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyDeleteRequest {
-
-        private Long id;
-
-        @Builder
-        public ReplyDeleteRequest(Long id) {
-            this.id = id;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyInfo {
-
-        private Long id;
-        private String content;
         private String nickname;
-        private LocalDateTime createdTime;
+        private String content;
+        private Long postId;
 
         @Builder
-        public ReplyInfo(Long id, String content, String nickname, LocalDateTime createdTime) {
+        public ReplySaveRequest(String nickname, String content, Long postId) {
+            this.nickname = nickname;
+            this.content = content;
+            this.postId = postId;
+        }
+
+        public Reply toEntity(String content) {
+            return Reply.builder()
+                    .content(content)
+                    .createdTime(LocalDateTime.now())
+                    .updatedTime(LocalDateTime.now())
+                    .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ReplyResponse {
+
+        private Long id;
+        private String content;
+        private LocalDateTime updatedTime;
+
+        @Builder
+        public ReplyResponse(Long id, String content, LocalDateTime updatedTime) {
             this.id = id;
             this.content = content;
-            this.nickname = nickname;
-            this.createdTime = createdTime;
+            this.updatedTime = updatedTime;
+        }
+
+        public ReplyResponse(Reply entity) {
+            this.id = entity.getId();
+            this.content = entity.getContent();
+            this.updatedTime = entity.getUpdatedTime();
         }
     }
 }
