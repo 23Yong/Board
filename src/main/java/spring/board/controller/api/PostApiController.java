@@ -12,28 +12,34 @@ import static spring.board.controller.dto.ReplyDto.*;
 @RequestMapping("/api/posts")
 @RestController
 public class PostApiController {
-
     private final PostService postService;
     private final ReplyService replyService;
-
     @PostMapping("/new")
     public Long save(@RequestBody PostSaveRequest requestDto,
                      @LoginCheck Member member) {
         return postService.save(requestDto, member.getNickname());
     }
-
     @PutMapping("/{id}")
     public Long update(@RequestBody PostUpdateRequest requestDto) {
         return postService.update(requestDto);
     }
-
     @DeleteMapping("/{id}")
     public Long delete(@PathVariable Long id) {
         return postService.delete(id);
     }
 
-    @PostMapping("/{postId}/reply")
-    public Long writeReply(@RequestBody ReplySaveRequest request) {
-        return replyService.registerReply(request);
+    @PostMapping("/{id}/reply")
+    public Long writeReply(@RequestBody ReplySaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
+        return replyService.save(request, id, member);
+    }
+
+    @PutMapping("/{id}/reply")
+    public Long updateReply(@RequestBody ReplyUpdateRequest request) {
+        return replyService.update(request);
+    }
+
+    @DeleteMapping("/{id}/reply")
+    public Long deleteReply(@RequestBody ReplyDeleteRequest request) {
+        return replyService.delete(request);
     }
 }
