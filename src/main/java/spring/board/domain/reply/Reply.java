@@ -6,7 +6,6 @@ import spring.board.domain.post.Post;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
 import static javax.persistence.FetchType.*;
 import static spring.board.controller.dto.ReplyDto.*;
 
@@ -55,12 +54,10 @@ public class Reply {
     public void addWriter(Member writer) {
         this.writer = writer;
     }
-
     public void addPost(Post post) {
         post.addReply(this);
         this.post = post;
     }
-
     public void editReply(String content) {
         this.content = content;
     }

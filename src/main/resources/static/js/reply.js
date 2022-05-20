@@ -4,6 +4,20 @@ var main = {
         $('#write-reply').on('click', function () {
             _this.save();
         });
+
+        document.querySelectorAll('#update-reply').forEach(function (item) {
+            item.addEventListener('click', function () {
+                const form = this.closest('form');
+                _this.update(form);
+            });
+        });
+
+        document.querySelectorAll('.delBtn').forEach(function (item) {
+            item.addEventListener('click', function () {
+                const form = this.closest('form');
+                _this.delete(form);
+            })
+        });
     },
 
     save : function () {

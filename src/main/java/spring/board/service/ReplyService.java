@@ -27,9 +27,9 @@ public class ReplyService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Long registerReply(ReplySaveRequest replyDto) {
-        Member member = memberRepository.findByNickname(replyDto.getNickname())
-                .orElseThrow(() -> new UserNotFoundException("찾으려는 회원이 없습니다."));
+    public Long save(ReplySaveRequest requestDto, Long postId, Member member) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
 
         Post post = postRepository.findById(replyDto.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
@@ -64,6 +64,12 @@ public class ReplyService {
         Reply reply = replyRepository.findById(replyDto.getId())
                 .orElseThrow(() -> new ReplyNotFoundException("찾으려는 댓글이 없습니다."));
 
-        replyRepository.delete(reply);
+        return replies.map(reply -> ReplyInfo.builder()
+                .id(reply.getId())
+                .content(reply.getContent())
+                .nickname(reply.getWriter().getNickname())
+                .createdTime(reply.getCreatedTime())
+                .build()
+        );
     }
 }

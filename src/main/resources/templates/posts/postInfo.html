@@ -44,22 +44,48 @@
                 </div>
             </form>
             <!-- 댓글 목록 -->
-            <div class="reply-list">
-                <ul th:each="reply : ${replies}">
-                    <span th:text="${reply.content}"></span>
-                    <span th:text="${reply.updatedTime}"></span>
+            <div class="card">
+                <!-- 댓글 개수 -->
+                <div class="card-header bi bi-chat-dots" th:text="'댓글 수 : ' + ${replies.totalElements}"></div>
+
+                <ul class="list-group-flush" th:each="reply : ${replies}">
+                    <li th:id="'reply-'+${reply.id}" class="list-group-item">
+                        <span>
+                            <span style="font-size: small" th:text="${reply.nickname}"></span>
+                            <span style="font-size: xx-small" th:text="${reply.createdTime}"></span>
+                        </span>
+
+                        <form th:if="${loginMember.nickname} == ${reply.nickname}"
+                              th:id="'replyDetailBtn-'+${reply.id}" style="display: inline">
+                            <input type="hidden" id="btn-replyId" th:value="${reply.id}" readonly>
+                            <a role="button" data-toggle="collapse" th:href="'#replyUpdateArea-'+${reply.id}"
+                               aria-expanded="false" th:aria-controls="'replyUpdateArea-'+${reply.id}" style="font-size: xx-small"
+                               class="btn btn-info btn-sm">수정</a>
+                            <a role="button" class="btn btn-danger btn-sm delBtn" style="font-size: xx-small">삭제</a>
+                        </form>
+                        <p class="collapse show" th:id="'replyUpdateArea-'+${reply.id}" th:text="${reply.content}"></p>
+
+                        <!-- 댓글 수정 영역 -->
+                        <div class="collapse" th:id="'replyUpdateArea-'+${reply.id}">
+                            <form>
+                                <input type="hidden" id="replyId" th:value="${reply.id}">
+                                <div class="form-group">
+                                    <textarea class="form-control" id="reply-content" rows="3" th:text="${reply.content}"></textarea>
+                                </div>
+                                <button id="update-reply" class="btn btn-outline-primary btn-sm">수정</button>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <a th:href="|@{/posts/{postId}/edit(postId = ${postInfo.postId})}|"
-                role="button" class="col btn btn-primary w-100 m-3">게시글 수정하기</a>
+           role="button" class="col btn btn-primary w-100 m-3">게시글 수정하기</a>
         <button class="col btn btn-danger w-100 m-3" id="btn-delete">삭제</button>
         <a href="/"
-                role="button" class="col btn btn-secondary w-100 m-3">홈으로</a>
+           role="button" class="col btn btn-secondary w-100 m-3">홈으로</a>
     </div>
 </div>
 
