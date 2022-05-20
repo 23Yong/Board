@@ -1,17 +1,16 @@
 package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.board.domain.Member;
+import spring.board.controller.dto.MemberDto;
+import spring.board.controller.dto.MemberDto.ChangePasswordRequest;
+import spring.board.controller.dto.MemberDto.SaveRequest;
+import spring.board.domain.member.Member;
 import spring.board.exception.member.DuplicatedMemberException;
+import spring.board.exception.member.UnauthenticatedUserException;
 import spring.board.exception.member.UserNotFoundException;
-import spring.board.repository.MemberRepository;
-
-import java.util.List;
+import spring.board.domain.member.MemberRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +23,12 @@ public class MemberService {
      * 회원 가입
      */
     @Transactional
-    public void join(Member member) {
-        if (memberRepository.existsByLoginId(member.getLoginId())) {
+    public void join(SaveRequest saveRequestDto) {
+        if (memberRepository.existsByLoginId(saveRequestDto.getLoginId())) {
             throw DuplicatedMemberException.createDuplicatedMemberException();
         }
 
+        Member member = saveRequestDto.toEntity();
         member.addMyPage();
         memberRepository.save(member);
     }
@@ -41,6 +41,39 @@ public class MemberService {
                 .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
 
         return member;
+    }
+
+    public Member findById(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("해당 회원이 존재하지 않습니다."));
+
+        return member;
+    }
+
+    @Transactional
+    public void updateNickname(MemberDto.EditMemberInfoRequest editMemberInfoRequest) {
+        String loginId = editMemberInfoRequest.getLoginId();
+        String changedNickname = editMemberInfoRequest.getNickname();
+
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
+
+        member.updateNickname(changedNickname);
+    }
+
+    @Transactional
+    public void updatePassword(String loginId, ChangePasswordRequest changePasswordRequest) {
+        String prevPassword = changePasswordRequest.getPrevPassword();
+        String afterPassword = changePasswordRequest.getAfterPassword();
+
+        if (!memberRepository.existsByLoginIdAndPassword(loginId, prevPassword)) {
+            throw new UnauthenticatedUserException("이전 비밀번호가 일치하지 않습니다.");
+        }
+
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
+
+        member.updatePassword(afterPassword);
     }
 
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
+<body>
+<div class="container">
+    <div class="py-5 text-center">
+        <h3>게시글 정보 수정</h3>
+    </div>
+    <form role="form" th:object="${postForm}" th:action="@{/posts/{postId}/edit(postId = ${postForm.postId})}" th:method="post">
+        <div class="form-label">
+            <label for="id">게시물 번호</label>
+            <input type="text" id="id" th:field="*{postId}"
+                   readonly />
+        </div>
+        <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="제목을 입력해주세요" />
+            <div th:errors="*{title}" class="field-error">제목 오류</div>
+        </div>
+        <div class="mb-4">
+            <label for="content">내용</label>
+            <textarea type="text" id="content" th:field="*{content}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="내용을 입력해주세요" />
+            <div th:errors="*{content}" class="field-error">내용 오류</div>
+        </div>
+    </form>
+    <a th:href="|@{/posts/{postId}(postId = ${postForm.postId})}|"
+       role="button" class="btn btn-secondary">취소</a>
+    <button class="btn btn-primary" id="btn-update">수정</button>
+
+    <footer th:replace="fragments/footer :: footer" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="/js/post.js"></script>
+</div>
+</body>
+</html>

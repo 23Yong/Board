@@ -1,54 +1,58 @@
 package spring.board.controller;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
+import spring.board.controller.form.PostEditForm;
 import spring.board.controller.form.PostForm;
-import spring.board.domain.Member;
-import spring.board.domain.Post;
-import spring.board.exception.member.UnauthenticatedUserException;
+import spring.board.domain.member.Member;
+import spring.board.domain.post.Post;
 import spring.board.service.PostService;
+import spring.board.service.ReplyService;
 
-import java.time.LocalDateTime;
+import static spring.board.controller.dto.MemberDto.*;
+import static spring.board.controller.dto.PostDto.*;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/posts")
 public class PostController {
-
     private final PostService postService;
-
-    @GetMapping("/posts/new")
+    private final ReplyService replyService;
+    @GetMapping("/new")
     public String createPostForm(@ModelAttribute(name = "postForm") PostForm postForm) {
         return "posts/createPostForm";
     }
 
-    @PostMapping("/posts/new")
-    public String createPost(@Validated PostForm postForm, BindingResult bindingResult, @LoginCheck Member member) {
-        if (bindingResult.hasErrors()) {
-            return "posts/createPostForm";
-        }
+    @GetMapping("/{id}")
+    public String getPostInfo(@PathVariable Long id, @LoginCheck Member member,
+                              Model model, Pageable pageable) {
+        Post findPost = postService.findPost(id);
+        Member findPostMember = findPost.getMember();
 
-        Post post = Post.builder()
-                .title(postForm.getTitle())
-                .content(postForm.getContent())
-                .createdTime(LocalDateTime.now())
+        PostMemberInfo memberInfo = PostMemberInfo.builder()
+                .nickname(findPostMember.getNickname())
                 .build();
 
-        log.info("member = {}, {}", member.getId(), member.getLoginId());
+        PostDetailInfo postDetailInfo = PostDetailInfo.builder()
+                .postId(id)
+                .title(findPost.getTitle())
+                .content(findPost.getContent())
+                .postMemberInfo(memberInfo)
+                .build();
 
-        if (member == null) {
-            throw new UnauthenticatedUserException("게시판 작성은 로그인 후 이용해주세요");
-        }
+        model.addAttribute("postInfo", postDetailInfo);
+        model.addAttribute("loginMember", member);
+        model.addAttribute("replies", replyService.findAllReplies(pageable, id));
+        return "posts/postInfo";
+    }
 
-        postService.registerPost(member.getLoginId(), post);
-
-        return "redirect:/";
+    @GetMapping("/{postId}/edit")
+    public String createPostEditForm(@ModelAttribute(name = "postForm") PostEditForm postEditForm) {
+        return "posts/createPostEditForm";
     }
 }

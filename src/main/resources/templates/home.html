@@ -1,48 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="fragments/header :: header">
-    <title>Hello</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-</head>
-<body>
+<head th:replace="fragments/header :: header"></head>
 
+<body>
 <div class="container">
     <div class="py-5 text-center">
         <h3>게시판</h3>
     </div>
 
     <div class="rightContainer justify-content-end">
-        <div th:unless="${#request.getSession(false)}">
-            <a class="btn btn-primary float-end mx-lg-2" href="/members/new">회원 가입</a>
-            <a class="btn btn-primary float-end mx-lg-2" href="/login">로그인</a>
-        </div>
-        <div th:if="${#request.getSession(false)}">
-            <a class="btn btn-primary float-end mx-lg-2" href="/members">마이 페이지</a>
+        <div th:if="${member != null}">
+            <a class="btn btn-primary float-end mx-lg-2 m-1" th:href="@{members/{loginId}/myPage(loginId = ${member.loginId})}">마이 페이지</a>
             <form action="/logout" method="post">
-                <button class="btn btn-primary float-end mx-lg-2">로그아웃</button>
+                <button class="btn btn-primary float-end mx-lg-2 m-1">로그아웃</button>
             </form>
+        </div>
+        <div th:unless="${member != null}">
+            <a class="btn btn-primary float-end mx-lg-2 m-1" href="/members/new">회원 가입</a>
+            <a class="btn btn-primary float-end mx-lg-2 m-1" href="/login">로그인</a>
         </div>
     </div>
 
     <div>
         <table class="table table-hover">
             <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th class="w-50 text-center" scope="col">제목</th>
-                    <th scope="col">등록날짜</th>
-                </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th class="w-50 text-center" scope="col">제목</th>
+                <th scope="col">등록날짜</th>
+            </tr>
             </thead>
             <tbody>
-                <th:block th:each="post : ${posts}">
-                    <tr>
-                        <td><a th:href="|/posts/${post.postId}|" th:text="${post.postId}"></a></td>
+            <th:block th:each="post : ${posts}">
+                <tr>
+                    <td><a th:href="|/posts/${post.postId}|" th:text="${post.postId}"></a></td>
 
-                        <td class="text-center"><a th:href="|/posts/${post.postId}|" th:text="${post.title}"></a></td>
+                    <td class="text-center"><a th:href="|/posts/${post.postId}|" th:text="${post.title}"></a></td>
 
-                        <td><a th:href="|/posts/${post.postId}|"  th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
-                    </tr>
-                </th:block>
+                    <td><a th:href="|/posts/${post.postId}|"  th:text="${#temporals.format(post.getCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
+                </tr>
+            </th:block>
             </tbody>
         </table>
     </div>
@@ -51,42 +48,7 @@
         <a class="btn btn-secondary float-end" href="posts/new">게시판 등록</a>
     </div>
 
-    <nav class="text-center">
-        <ul class="pagination"
-            th:with="start=${T(Math).floor(postPage.number/10)*10 + 1},last=(${start + 9 < postPage.totalPages ? start + 9 : postPage.totalPages})">
-            <li class="page-item">
-                <a class="page-link" th:href="@{/(page=1)}" aria-label="First">
-                    <span aria-hidden="true">First</span>
-                </a>
-            </li>
-
-            <li class="page-item" th:class="${postPage.first} ? 'disabled'">
-                <a class="page-link" th:href="${postPage.first} ? '#' :@{/(page=${postPage.number})}" aria-label="Previous">
-                    <span aria-hidden="true">&lt;</span>
-                </a>
-            </li>
-
-            <li th:if="${last == 0}">
-                <a class="page-link" th:text="1"></a>
-            </li>
-
-            <li th:unless="${last==0}" class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == postPage.number + 1} ? 'active'">
-                <a class="page-link" th:text="${page}" th:href="@{/(page=${page})}"></a>
-            </li>
-
-            <li class="page-item" th:class="${postPage.last} ? 'disabled'">
-                <a class="page-link" th:href="${postPage.last} ? '#' : @{/(page=${postPage.number + 2})}" aria-label="Next">
-                    <span aria-hidden="true">&gt;</span>
-                </a>
-            </li>
-
-            <li class="page-item">
-                <a class="page-link" th:href="@{/(page=${postPage.totalPages})}" aria-label="Last">
-                    <span aria-hidden="true">Last</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <nav th:replace="fragments/navigationbar :: page-nav"></nav>
 
     <footer th:replace="fragments/footer :: footer" />
 </div><!-- container -->

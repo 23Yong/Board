@@ -1,16 +1,20 @@
-package spring.board.domain;
+package spring.board.domain.member;
 
 import lombok.*;
+import spring.board.domain.MyPage;
+import spring.board.domain.post.Post;
+import spring.board.domain.reply.Reply;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Member {
 
@@ -26,6 +30,7 @@ public class Member {
     private String password;
 
     @NotEmpty
+    @Column(unique = true)
     private String nickname;
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
@@ -33,7 +38,10 @@ public class Member {
     private MyPage myPage;
 
     @OneToMany(mappedBy = "member")
-    private List<Post> posts;
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "writer")
+    private List<Reply> replies = new ArrayList<>();
 
     public void addMyPage() {
         this.myPage = new MyPage();
@@ -41,11 +49,19 @@ public class Member {
 
     public void addPost(Post post) {
         posts.add(post);
-        post.setMember(this);
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 
     @Builder
-    public Member(String loginId, String password, String nickname) {
+    public Member(Long id, String loginId, String password, String nickname) {
+        this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
