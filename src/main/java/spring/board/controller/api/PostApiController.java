@@ -1,4 +1,5 @@
 package spring.board.controller.api;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
@@ -6,8 +7,11 @@ import spring.board.controller.dto.PostDto;
 import spring.board.domain.member.Member;
 import spring.board.service.PostService;
 import spring.board.service.ReplyService;
+
 import static spring.board.controller.dto.PostDto.*;
 import static spring.board.controller.dto.ReplyDto.*;
+
+
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
 @RestController
@@ -18,7 +22,7 @@ public class PostApiController {
 
     @PostMapping("/new")
     public Long save(@RequestBody PostSaveRequest requestDto,
-                     @LoginCheck Member member) {
+                    @LoginCheck Member member) {
         return postService.save(requestDto, member.getNickname());
     }
 

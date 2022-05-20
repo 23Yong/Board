@@ -25,14 +25,13 @@ public class ReplyDto {
             this.postId = postId;
         }
 
-        public Reply toEntity(Post post, Member member) {
-            Reply reply = Reply.builder()
-                    .content(content)
+        public Reply toEntity() {
+            return Reply.builder()
+                    .id(this.id)
+                    .content(this.content)
+                    .createdTime(LocalDateTime.now())
+                    .updatedTime(LocalDateTime.now())
                     .build();
-
-            reply.addPost(post);
-            reply.addWriter(member);
-            return reply;
         }
     }
 

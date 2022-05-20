@@ -33,7 +33,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post")
     private List<Reply> replies = new ArrayList<>();
 
     public void setMember(Member member) {

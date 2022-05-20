@@ -3,6 +3,7 @@ package spring.board.controller.dto;
 import lombok.*;
 import spring.board.domain.member.Member;
 import spring.board.domain.post.Post;
+
 import java.time.LocalDateTime;
 
 import static spring.board.controller.dto.MemberDto.*;
@@ -48,8 +49,8 @@ public class PostDto {
         }
     }
 
-    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Getter
     public static class PostInfo {
 
         private Long postId;
@@ -62,6 +63,7 @@ public class PostDto {
             this.title = title;
             this.createdTime = createdTime;
         }
+
         public PostInfo(Post entity) {
             this.postId = entity.getId();
             this.title = entity.getTitle();
@@ -69,9 +71,9 @@ public class PostDto {
         }
     }
 
-    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class PostDetailInfo {
+    @Getter
+    public static class PostDetailRequest {
 
         private Long postId;
         private String title;
