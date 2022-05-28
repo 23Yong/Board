@@ -21,8 +21,10 @@ import static spring.board.controller.dto.PostDto.*;
 @Slf4j
 @RequestMapping("/posts")
 public class PostController {
+
     private final PostService postService;
     private final ReplyService replyService;
+
     @GetMapping("/new")
     public String createPostForm(@ModelAttribute(name = "postForm") PostForm postForm) {
         return "posts/createPostForm";

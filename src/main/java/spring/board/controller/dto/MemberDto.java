@@ -2,6 +2,7 @@ package spring.board.controller.dto;
 
 import lombok.*;
 import spring.board.domain.member.Member;
+import spring.board.domain.member.Role;
 
 public class MemberDto {
 
@@ -28,41 +29,46 @@ public class MemberDto {
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class SaveRequest {
+    public static class MemberSaveRequest {
 
+        private String email;
         private String loginId;
         private String password;
         private String nickname;
+        private Role role;
+
+        public void encodingPassword(String password) {
+            this.password = password;
+        }
 
         @Builder
-        public SaveRequest(String loginId, String password, String nickname) {
+        public MemberSaveRequest(String email, String loginId, String password, String nickname) {
+            this.email = email;
             this.loginId = loginId;
             this.password = password;
             this.nickname = nickname;
+            this.role = Role.USER;
         }
 
         public Member toEntity() {
             return Member.builder()
-                    .loginId(this.loginId)
-                    .password(this.password)
-                    .nickname(this.nickname)
+                    .email(email)
+                    .loginId(loginId)
+                    .password(password)
+                    .nickname(nickname)
+                    .role(role)
                     .build();
         }
     }
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class ChangePasswordRequest {
-
-        private String loginId;
-
+    public static class PasswordUpdateRequest {
         private String prevPassword;
         private String afterPassword;
 
         @Builder
-        public ChangePasswordRequest(String loginId,
-                                     String prevPassword, String afterPassword) {
-            this.loginId = loginId;
+        public PasswordUpdateRequest(String prevPassword, String afterPassword) {
             this.prevPassword = prevPassword;
             this.afterPassword = afterPassword;
         }
@@ -70,14 +76,12 @@ public class MemberDto {
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class EditMemberInfoRequest {
+    public static class MemberUpdateRequest {
 
-        private String loginId;
         private String nickname;
 
         @Builder
-        public EditMemberInfoRequest(String loginId, String nickname) {
-            this.loginId = loginId;
+        public MemberUpdateRequest(String nickname) {
             this.nickname = nickname;
         }
     }

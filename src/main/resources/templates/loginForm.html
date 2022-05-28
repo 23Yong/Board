@@ -14,14 +14,14 @@
         <form role="form" action="/login" th:object="${loginForm}" method="post">
             <div>
                 <label for="loginId"></label>
-                <input id="loginId" th:field="*{loginId}"
+                <input id="loginId" th:field="*{loginId}" name="loginId"
                        th:errorclass="field-error"
                        class="form-control" placeholder="아이디를 입력해주세요" />
                 <div class="field-error" th:errors="*{loginId}">아이디는 필수로 입력해주세요</div>
             </div>
             <div>
                 <label for="password"></label>
-                <input type="password" id="password" th:field="*{password}"
+                <input type="password" id="password" th:field="*{password}" name="password"
                        th:errorclass="field-error"
                        class="form-control" placeholder="비밀번호를 입력해주세요" />
                 <div class="field-error" th:errors="*{password}">비밀번호는 필수로 입력해주세요</div>
