@@ -15,12 +15,10 @@ import spring.board.controller.form.PasswordEditForm;
 import spring.board.domain.member.Member;
 import spring.board.service.MemberService;
 
-import javax.validation.Valid;
-
 import static spring.board.controller.dto.MemberDto.*;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class MemberController {
 
     private final MemberService memberService;
@@ -32,18 +30,18 @@ public class MemberController {
 
     @PostMapping("/members/new")
     public String createMember(@Validated MemberForm memberForm, BindingResult bindingResult) {
-
         if(bindingResult.hasErrors()) {
             return "/members/createMemberForm";
         }
 
-        SaveRequest member = SaveRequest.builder()
+        MemberSaveRequest saveRequest = MemberSaveRequest.builder()
+                .email(memberForm.getEmail())
                 .loginId(memberForm.getLoginId())
                 .password(memberForm.getPassword())
                 .nickname(memberForm.getNickname())
                 .build();
 
-        memberService.join(member);
+        memberService.save(saveRequest);
         return "redirect:/";
     }
 
@@ -66,43 +64,10 @@ public class MemberController {
         return "members/createEditForm";
     }
 
-    @PostMapping("members/{loginId}/edit")
-    public String editMemberInfo(@PathVariable String loginId,
-                                 @Valid @ModelAttribute(name = "member") MemberEditForm memberEditForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "members/createEditForm";
-        }
-
-        EditMemberInfoRequest member = EditMemberInfoRequest.builder()
-                .loginId(memberEditForm.getLoginId())
-                .nickname(memberEditForm.getNickname())
-                .build();
-        memberService.updateNickname(member);
-
-        return "redirect:/members/{loginId}/myPage";
-    }
-
     @GetMapping("members/{loginId}/edit/password")
     public String createPasswordEditForm(@PathVariable String loginId,
             @ModelAttribute(name = "passwordForm") PasswordEditForm passwordEditForm) {
         passwordEditForm.setLoginId(loginId);
         return "members/createPasswordEditForm";
-    }
-
-    @PostMapping("members/{loginId}/edit/password")
-    public String editPassword(@PathVariable String loginId,
-                               @Valid @ModelAttribute(name = "passwordForm") PasswordEditForm passwordEditForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "members/createPasswordEditForm";
-        }
-
-        ChangePasswordRequest passwordRequest = ChangePasswordRequest.builder()
-                .loginId(loginId)
-                .prevPassword(passwordEditForm.getPrevPassword())
-                .afterPassword(passwordEditForm.getAfterPassword())
-                .build();
-        memberService.updatePassword(loginId, passwordRequest);
-
-        return "redirect:/members/{loginId}/myPage";
     }
 }

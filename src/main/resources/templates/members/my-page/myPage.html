@@ -19,7 +19,7 @@
     </div>
 
     <div>
-        <div class="row">
+        <div class="row mb-4">
             <div class="col">
                 <a type="submit" class="w-100 btn btn-primary" th:href="@{/members/{loginId}/edit(loginId = ${member.loginId})}">내 정보 수정하기</a>
             </div>
@@ -27,9 +27,9 @@
                 <button type="button" class="w-100 btn btn-secondary" th:onclick="|location.href='@{/}'|">홈으로</button>
             </div>
         </div>
-        <div class="row mt-0">
+        <div class="row mt-4">
             <div class="col">
-                <button class="w-100 btn btn-light btn-lg" onclick="location.href='createPasswordEditForm.html'"
+                <button class="w-100 btn btn-outline-primary btn-lg" onclick="location.href='createPasswordEditForm.html'"
                         th:onclick="|location.href='@{/members/{loginId}/edit/password(loginId = ${member.loginId})}'|">비밀번호 수정</button>
             </div>
         </div>
