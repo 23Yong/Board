@@ -1,22 +1,15 @@
 package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import spring.board.common.SessionConst;
 import spring.board.domain.member.Member;
 import spring.board.domain.member.MemberDetails;
-import spring.board.exception.member.CredentialException;
 import spring.board.domain.member.MemberRepository;
-import spring.board.exception.member.UserNotFoundException;
 
 import javax.servlet.http.HttpSession;
-
-import java.util.ArrayList;
 
 import static spring.board.common.SessionConst.*;
 

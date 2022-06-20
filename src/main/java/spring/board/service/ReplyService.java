@@ -7,18 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.board.controller.dto.ReplyDto;
 import spring.board.domain.member.Member;
 import spring.board.domain.post.Post;
 import spring.board.domain.reply.Reply;
-import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.post.PostNotFoundException;
 import spring.board.exception.reply.ReplyNotFoundException;
-import spring.board.domain.member.MemberRepository;
 import spring.board.domain.post.PostRepository;
 import spring.board.domain.reply.ReplyRepository;
-
-import java.util.List;
 
 import static spring.board.controller.dto.ReplyDto.*;
 
@@ -29,14 +24,12 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
 
-    private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
     @Transactional
     public Long save(ReplySaveRequest requestDto, Long postId, Member member) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
-
 
         Reply reply = requestDto.toEntity(post, member);
         replyRepository.save(reply);
