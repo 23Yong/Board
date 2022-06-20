@@ -7,10 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import spring.board.common.annotation.LoginCheck;
-import spring.board.controller.dto.MemberDto;
-import spring.board.controller.dto.PostDto;
 import spring.board.domain.member.Member;
-import spring.board.domain.post.Post;
 import spring.board.service.PostService;
 
 import java.util.List;

@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import spring.board.common.security.AuthenticationEntryPointImpl;
+import spring.board.common.security.oauth.CustomOAuth2UserService;
+import spring.board.domain.member.Role;
 import spring.board.service.LoginService;
 
 @RequiredArgsConstructor
@@ -18,6 +21,8 @@ import spring.board.service.LoginService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LoginService loginService;
+    private final AuthenticationEntryPointImpl authenticationEntryPoint;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -46,20 +51,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/", "/login", "/members/new")
-                    .permitAll()
-                .anyRequest()
-                    .authenticated()
-                .and()
-                .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login")
-                    .usernameParameter("loginId")
-                    .passwordParameter("password")
-                .and()
-                .logout()
-                .logoutSuccessUrl("/")
+                    .authorizeRequests()
+                        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/login", "/members/new")
+                            .permitAll()
+                        .antMatchers("/api/**", "members/{loginId:[\\w+]}/**").hasRole(Role.USER.name())
+                        .anyRequest()
+                            .authenticated()
+                    .and()
+                    .formLogin()
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                            .usernameParameter("loginId")
+                            .passwordParameter("password")
+                    .and()
+                        .logout()
+                        .logoutSuccessUrl("/")
                 .invalidateHttpSession(true);
+
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint);
+
+        http
+                .oauth2Login()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
     }
 }

@@ -5,10 +5,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.common.SessionConst;
+import spring.board.common.security.oauth.dto.OAuthAttributes;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.MemberDto.PasswordUpdateRequest;
 import spring.board.controller.dto.MemberDto.MemberSaveRequest;
 import spring.board.domain.member.Member;
+import spring.board.domain.member.Role;
 import spring.board.exception.member.DuplicatedMemberException;
 import spring.board.exception.member.UnauthenticatedUserException;
 import spring.board.exception.member.UserNotFoundException;
@@ -78,5 +80,19 @@ public class MemberService {
 
         session.setAttribute(SESSION_LOGIN, member);
         return member.getId();
+    }
+
+    @Transactional
+    public Member saveOrUpdate(OAuthAttributes attributes) {
+        Member member = memberRepository.findByEmail(attributes.getEmail())
+                .map(entity -> {
+                    entity.updateNickname(attributes.getName());
+                    entity.updateProfileImageUrl(attributes.getPicture());
+                    entity.updateRole(Role.USER);
+                    return entity;
+                })
+                .orElse(attributes.toEntity());
+
+        return memberRepository.save(member);
     }
 }
