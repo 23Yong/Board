@@ -19,36 +19,8 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
 
-    private final LoginService loginService;
-
-    @ExceptionHandler(CredentialException.class)
-    private String handleCredentialException(CredentialException ex, Model model) {
-        model.addAttribute("loginForm", new LoginForm());
-        model.addAttribute("message", "가입되지 않은 사용자이거나 잘못된 비밀번호 입니다.");
-        return "loginForm";
-    }
-
     @GetMapping("/login")
     public String createLoginForm(@ModelAttribute("loginForm")LoginForm loginForm) {
         return "loginForm";
-    }
-
-    @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
-                        @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request) {
-        if (bindingResult.hasErrors()) {
-            return "loginForm";
-        }
-
-        loginService.login(loginForm.getLoginId(), loginForm.getPassword());
-
-        return "redirect:" + redirectURL;
-    }
-
-    @PostMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        loginService.logout();
-
-        return "redirect:/";
     }
 }

@@ -1,37 +1,48 @@
 package spring.board.domain.member;
 
 import lombok.*;
+import spring.board.common.security.consts.OauthType;
+import spring.board.domain.BaseTimeEntity;
 import spring.board.domain.MyPage;
 import spring.board.domain.post.Post;
 import spring.board.domain.reply.Reply;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member {
+@Entity
+public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Column(name = "member_id", nullable = false)
     private Long id;
 
-    @Column(unique = true)
-    @NotEmpty
+    @Column(nullable = false)
     private String loginId;
 
-    @NotEmpty
+    @Column(unique = true, nullable = false)
+    private String email;
+
     private String password;
 
-    @NotEmpty
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String nickname;
+
+    private String profileImageUrl;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "oauth_type")
+    private OauthType oauthType;
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "my_page_id")
@@ -59,11 +70,31 @@ public class Member {
         this.password = password;
     }
 
+    public void updateProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+
     @Builder
-    public Member(Long id, String loginId, String password, String nickname) {
-        this.id = id;
+    public Member(String email, String loginId, String password, String nickname, Role role) {
+        this.email = email;
         this.loginId = loginId;
         this.password = password;
         this.nickname = nickname;
+        this.role = role;
+    }
+
+    public static Member createOauth(String oauthId, String name, String email, String profileImageUrl, OauthType oauthType) {
+        Member member = new Member();
+        member.loginId = oauthId;
+        member.nickname = name;
+        member.email = email;
+        member.profileImageUrl = profileImageUrl;
+        member.role = Role.USER;
+        member.oauthType = oauthType;
+        return member;
     }
 }

@@ -8,6 +8,13 @@
     </div>
     <form role="form" action="/members/new" th:object="${memberForm}" method="post">
         <div>
+            <label for="email">이메일</label>
+            <input type="text" id="email" th:field="*{email}"
+                   th:errorclass="field-error"
+                   class="form-control" placeholder="이메일을 입력해주세요" />
+            <div th:errors="*{email}" class="field-error">이메일 오류</div>
+        </div>
+        <div>
             <label for="loginId">아아디</label>
             <input type="text" id="loginId" th:field="*{loginId}"
                    th:errorclass="field-error"

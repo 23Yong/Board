@@ -40,3 +40,5 @@ out/
 *.css
 bootstrap.*
 *.map
+
+application-oauth.yml
