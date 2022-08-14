@@ -58,7 +58,7 @@ public class ArticleCommentService {
 
         Article article = articleRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
-        Page<ArticleComment> replies = new PageImpl<>(article.getReplies());
+        Page<ArticleComment> replies = new PageImpl<>(article.getArticleComments());
 
         return replies.map(reply -> ReplyInfo.builder()
                 .id(reply.getId())

@@ -1,6 +1,7 @@
 package spring.board.controller.dto;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import spring.board.domain.member.Member;
 import spring.board.domain.member.Role;
 
@@ -36,10 +37,6 @@ public class MemberDto {
         private String password;
         private String nickname;
         private Role role;
-
-        public void encodingPassword(String password) {
-            this.password = password;
-        }
 
         @Builder
         public MemberSaveRequest(String email, String loginId, String password, String nickname) {
