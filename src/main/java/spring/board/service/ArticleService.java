@@ -39,7 +39,7 @@ public class ArticleService {
         Article article = articleRepository.findById(request.getId())
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시물이 없습니다."));
 
-        article.changePost(request.getTitle(), request.getContent());
+        article.changeArticle(request.getTitle(), request.getContent());
         return article.getId();
     }
 

@@ -27,8 +27,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder;
-
     private final HttpSession session;
 
     @Transactional
@@ -36,8 +34,7 @@ public class MemberService {
         if (memberRepository.existsByLoginId(requestDto.getLoginId())) {
             throw DuplicatedMemberException.createDuplicatedMemberException();
         }
-        
-        requestDto.encodingPassword(passwordEncoder.encode(requestDto.getPassword()));
+
         Member member = requestDto.toEntity();
         member.addMyPage();
         memberRepository.save(member);
@@ -68,15 +65,6 @@ public class MemberService {
     public Long updatePassword(String loginId, PasswordUpdateRequest requestDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
-
-        if (passwordEncoder.matches(member.getPassword(), requestDto.getPrevPassword())) {
-            throw new UnauthenticatedUserException("이전 비밀번호가 일치하지 않습니다.");
-        }
-
-        String afterPassword = passwordEncoder.encode(
-                requestDto.getAfterPassword());
-
-        member.updatePassword(afterPassword);
 
         session.setAttribute(SESSION_LOGIN, member);
         return member.getId();
