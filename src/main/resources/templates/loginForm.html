@@ -11,7 +11,7 @@
         </div>
 
         <h4>회원 정보 입력</h4>
-        <form role="form" action="/login" th:object="${loginForm}" method="post">
+        <form role="form" action="/login" th:object="${loginForm}" method="article">
             <div>
                 <label for="loginId"></label>
                 <input id="loginId" th:field="*{loginId}" name="loginId"

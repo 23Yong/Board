@@ -1,11 +1,11 @@
-package spring.board.domain.post;
+package spring.board.domain.article;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.domain.BaseTimeEntity;
-import spring.board.domain.reply.Reply;
+import spring.board.domain.BaseEntity;
+import spring.board.domain.articlecomment.ArticleComment;
 import spring.board.domain.member.Member;
 
 import javax.persistence.*;
@@ -17,10 +17,10 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Post extends BaseTimeEntity {
+public class Article extends BaseEntity {
 
     @Id @GeneratedValue
-    @Column(name = "post_id")
+    @Column(name = "article_id")
     private Long id;
 
     @Column(length = 500, nullable = false)
@@ -29,12 +29,15 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @Column
+    private String hashtag;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Reply> replies = new ArrayList<>();
+    @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<ArticleComment> replies = new ArrayList<>();
 
     public void setMember(Member member) {
         this.member = member;
@@ -42,7 +45,7 @@ public class Post extends BaseTimeEntity {
     }
 
     @Builder
-    public Post(Long id, String title, String content) {
+    public Article(Long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -53,7 +56,7 @@ public class Post extends BaseTimeEntity {
         this.content = content;
     }
 
-    public void addReply(Reply reply) {
-        replies.add(reply);
+    public void addReply(ArticleComment articleComment) {
+        replies.add(articleComment);
     }
 }

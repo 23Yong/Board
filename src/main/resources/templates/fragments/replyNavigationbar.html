@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<nav th:fragment="page-nav-reply" class="text-center" style="display:inline-block;">
+<nav th:fragment="page-nav-articleComment" class="text-center" style="display:inline-block;">
     <ul class="pagination"
         th:with="start=${T(Math).floor(replies.number/10)*10 + 1},last=(${start + 9 < replies.totalPages ? start + 9 : replies.totalPages})">
         <li class="page-item">

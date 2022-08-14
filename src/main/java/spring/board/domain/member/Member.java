@@ -2,10 +2,10 @@ package spring.board.domain.member;
 
 import lombok.*;
 import spring.board.common.security.consts.OauthType;
-import spring.board.domain.BaseTimeEntity;
+import spring.board.domain.BaseEntity;
 import spring.board.domain.MyPage;
-import spring.board.domain.post.Post;
-import spring.board.domain.reply.Reply;
+import spring.board.domain.article.Article;
+import spring.board.domain.articlecomment.ArticleComment;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member extends BaseTimeEntity {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_id", nullable = false)
@@ -49,17 +49,17 @@ public class Member extends BaseTimeEntity {
     private MyPage myPage;
 
     @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+    private List<Article> articles = new ArrayList<>();
 
     @OneToMany(mappedBy = "writer")
-    private List<Reply> replies = new ArrayList<>();
+    private List<ArticleComment> replies = new ArrayList<>();
 
     public void addMyPage() {
         this.myPage = new MyPage();
     }
 
-    public void addPost(Post post) {
-        posts.add(post);
+    public void addPost(Article article) {
+        articles.add(article);
     }
 
     public void updateNickname(String nickname) {

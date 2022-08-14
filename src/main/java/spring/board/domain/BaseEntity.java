@@ -1,7 +1,9 @@
 package spring.board.domain;
 
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,11 +14,17 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseTimeEntity {
+public class BaseEntity {
 
     @CreatedDate
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
+
+    @CreatedBy
+    private String createdBy;
 
     @LastModifiedDate
-    private LocalDateTime updatedTime;
+    private LocalDateTime modifiedAt;
+
+    @LastModifiedBy
+    private String modifiedBy;
 }

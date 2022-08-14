@@ -3,8 +3,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.domain.member.Member;
-import spring.board.service.PostService;
-import spring.board.service.ReplyService;
+import spring.board.service.ArticleService;
+import spring.board.service.ArticleCommentService;
 import static spring.board.controller.dto.PostDto.*;
 import static spring.board.controller.dto.ReplyDto.*;
 
@@ -13,39 +13,39 @@ import static spring.board.controller.dto.ReplyDto.*;
 @RestController
 public class PostApiController {
 
-    private final PostService postService;
+    private final ArticleService articleService;
 
-    private final ReplyService replyService;
+    private final ArticleCommentService articleCommentService;
 
     @PostMapping("/new")
     public Long save(@RequestBody PostSaveRequest requestDto,
                      @LoginCheck Member member) {
 
-        return postService.save(requestDto, member.getNickname());
+        return articleService.save(requestDto, member.getNickname());
     }
 
     @PutMapping("/{id}")
     public Long update(@RequestBody PostUpdateRequest requestDto) {
-        return postService.update(requestDto);
+        return articleService.update(requestDto);
     }
 
     @DeleteMapping("/{id}")
     public Long delete(@PathVariable Long id) {
-        return postService.delete(id);
+        return articleService.delete(id);
     }
 
     @PostMapping("/{id}/reply")
     public Long writeReply(@RequestBody ReplySaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
-        return replyService.save(request, id, member);
+        return articleCommentService.save(request, id, member);
     }
 
     @PutMapping("/{id}/reply")
     public Long updateReply(@RequestBody ReplyUpdateRequest request) {
-        return replyService.update(request);
+        return articleCommentService.update(request);
     }
 
     @DeleteMapping("/{id}/reply")
     public Long deleteReply(@RequestBody ReplyDeleteRequest request) {
-        return replyService.delete(request);
+        return articleCommentService.delete(request);
     }
 }
