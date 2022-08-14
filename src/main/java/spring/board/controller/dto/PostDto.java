@@ -1,7 +1,8 @@
 package spring.board.controller.dto;
 import lombok.*;
+import spring.board.domain.article.Article;
 import spring.board.domain.member.Member;
-import spring.board.domain.post.Post;
+
 import java.time.LocalDateTime;
 import static spring.board.controller.dto.MemberDto.*;
 public class PostDto {
@@ -15,13 +16,13 @@ public class PostDto {
             this.title = title;
             this.content = content;
         }
-        public Post toEntity(Member member) {
-            Post post = Post.builder()
+        public Article toEntity(Member member) {
+            Article article = Article.builder()
                     .title(title)
                     .content(content)
                     .build();
-            post.setMember(member);
-            return post;
+            article.setMember(member);
+            return article;
         }
     }
     @Getter
@@ -49,10 +50,10 @@ public class PostDto {
             this.title = title;
             this.createdTime = createdTime;
         }
-        public PostInfo(Post entity) {
+        public PostInfo(Article entity) {
             this.postId = entity.getId();
             this.title = entity.getTitle();
-            this.createdTime = entity.getCreatedTime();
+            this.createdTime = entity.getCreatedAt();
         }
     }
 

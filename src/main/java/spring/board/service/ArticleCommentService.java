@@ -7,49 +7,48 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.board.domain.article.Article;
 import spring.board.domain.member.Member;
-import spring.board.domain.post.Post;
-import spring.board.domain.reply.Reply;
+import spring.board.domain.articlecomment.ArticleComment;
 import spring.board.exception.post.PostNotFoundException;
 import spring.board.exception.reply.ReplyNotFoundException;
-import spring.board.domain.post.PostRepository;
-import spring.board.domain.reply.ReplyRepository;
+import spring.board.domain.articlecomment.ArticleCommentRepository;
 
 import static spring.board.controller.dto.ReplyDto.*;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
-public class ReplyService {
+public class ArticleCommentService {
 
-    private final ReplyRepository replyRepository;
+    private final ArticleCommentRepository articleCommentRepository;
 
-    private final PostRepository postRepository;
+    private final spring.board.domain.article.ArticleRepository articleRepository;
 
     @Transactional
     public Long save(ReplySaveRequest requestDto, Long postId, Member member) {
-        Post post = postRepository.findById(postId)
+        Article article = articleRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
 
-        Reply reply = requestDto.toEntity(post, member);
-        replyRepository.save(reply);
-        return reply.getId();
+        ArticleComment articleComment = requestDto.toEntity(article, member);
+        articleCommentRepository.save(articleComment);
+        return articleComment.getId();
     }
 
     @Transactional
     public Long update(ReplyUpdateRequest requestDto) {
         Long id = requestDto.getId();
-        Reply reply = replyRepository.findById(id)
+        ArticleComment articleComment = articleCommentRepository.findById(id)
                 .orElseThrow(() -> new ReplyNotFoundException("찾으려는 댓글이 없습니다."));
 
-        reply.editReply(requestDto.getContent());
+        articleComment.editReply(requestDto.getContent());
         return id;
     }
 
     @Transactional
     public Long delete(ReplyDeleteRequest requestDto) {
         Long id = requestDto.getId();
-        replyRepository.deleteById(id);
+        articleCommentRepository.deleteById(id);
         return id;
     }
 
@@ -57,15 +56,15 @@ public class ReplyService {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
         pageable = PageRequest.of(page, 10);
 
-        Post post = postRepository.findById(postId)
+        Article article = articleRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("찾으려는 게시글이 없습니다."));
-        Page<Reply> replies = new PageImpl<>(post.getReplies());
+        Page<ArticleComment> replies = new PageImpl<>(article.getReplies());
 
         return replies.map(reply -> ReplyInfo.builder()
                 .id(reply.getId())
                 .content(reply.getContent())
                 .nickname(reply.getWriter().getNickname())
-                .createdTime(reply.getCreatedTime())
+                .createdTime(reply.getCreatedAt())
                 .build()
         );
     }

@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.domain.member.Member;
-import spring.board.service.PostService;
+import spring.board.service.ArticleService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +20,11 @@ import static spring.board.controller.dto.PostDto.*;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final PostService postService;
+    private final ArticleService articleService;
 
     @GetMapping("/")
     public String home(@LoginCheck Member loginMember, Model model, Pageable pageable) {
-        Page<PostInfo> posts = postService.findAllPosts(pageable);
+        Page<PostInfo> posts = articleService.findAllPosts(pageable);
         List<PostInfo> postInfoList = posts.stream().collect(Collectors.toList());
 
         model.addAttribute("posts", postInfoList);

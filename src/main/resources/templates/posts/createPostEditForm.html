@@ -6,7 +6,7 @@
     <div class="py-5 text-center">
         <h3>게시글 정보 수정</h3>
     </div>
-    <form role="form" th:object="${postForm}" th:action="@{/posts/{postId}/edit(postId = ${postForm.postId})}" th:method="post">
+    <form role="form" th:object="${postForm}" th:action="@{/posts/{postId}/edit(postId = ${postForm.postId})}" th:method="article">
         <div class="form-label">
             <label for="id">게시물 번호</label>
             <input type="text" id="id" th:field="*{postId}"
@@ -33,7 +33,7 @@
 
     <footer th:replace="fragments/footer :: footer" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="/js/post.js"></script>
+    <script src="/js/article.js"></script>
 </div>
 </body>
 </html>

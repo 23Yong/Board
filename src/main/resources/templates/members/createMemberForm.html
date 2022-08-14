@@ -6,7 +6,7 @@
     <div class="py-5 text-center">
         <h3>회원 가입</h3>
     </div>
-    <form role="form" action="/members/new" th:object="${memberForm}" method="post">
+    <form role="form" action="/members/new" th:object="${memberForm}" method="article">
         <div>
             <label for="email">이메일</label>
             <input type="text" id="email" th:field="*{email}"

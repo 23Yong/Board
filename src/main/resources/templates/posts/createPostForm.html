@@ -8,7 +8,7 @@
     <div class="py-5 text-center">
         <h3>게시물 등록</h3>
     </div>
-    <form role="form" action="/posts/new" th:object="${postForm}" method="post">
+    <form role="form" action="/posts/new" th:object="${postForm}" method="article">
         <div class="m-1">
             <label for="title">제목</label>
             <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요" required/>
@@ -27,7 +27,7 @@
     <footer th:replace="fragments/footer :: footer" />
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="/js/post.js"></script>
+    <script src="/js/article.js"></script>
 </div>  <!-- container -->
 </body>
 </html>
