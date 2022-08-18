@@ -58,7 +58,7 @@ public class Member extends AuditingFields {
         this.myPage = new MyPage();
     }
 
-    public void addPost(Article article) {
+    public void addArticle(Article article) {
         articles.add(article);
     }
 

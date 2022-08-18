@@ -34,13 +34,13 @@
             </tr>
             </thead>
             <tbody>
-            <th:block th:each="article : ${posts}">
+            <th:block th:each="article : ${articles}">
                 <tr>
-                    <td><a th:href="|/posts/${article.postId}|" th:text="${article.postId}"></a></td>
+                    <td><a th:href="|/posts/${article.getArticleId}|" th:text="${article.getArticleId}"></a></td>
 
-                    <td class="text-center"><a th:href="|/posts/${article.postId}|" th:text="${article.title}"></a></td>
+                    <td class="text-center"><a th:href="|/posts/${article.getArticleId}|" th:text="${article.title}"></a></td>
 
-                    <td><a th:href="|/posts/${article.postId}|"  th:text="${#temporals.format(article.getCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
+                    <td><a th:href="|/posts/${article.getArticleId}|" th:text="${#temporals.format(article.getCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></a></td>
                 </tr>
             </th:block>
             </tbody>
@@ -48,7 +48,7 @@
     </div>
 
     <div class="m-auto">
-        <a class="btn btn-secondary float-end" href="posts/new">게시판 등록</a>
+        <a class="btn btn-secondary float-end" href="articles/new">게시판 등록</a>
     </div>
 
     <nav th:replace="fragments/navigationbar :: page-nav"></nav>

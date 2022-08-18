@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static spring.board.controller.dto.MemberDto.*;
-import static spring.board.controller.dto.PostDto.*;
+import static spring.board.controller.dto.ArticleDto.*;
 
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
@@ -38,8 +38,8 @@ class ArticleServiceTest {
                 .build();
     }
 
-    private PostSaveRequest createPostSaveRequest() {
-        return PostSaveRequest.builder()
+    private ArticleSaveRequest createPostSaveRequest() {
+        return ArticleSaveRequest.builder()
                 .title("title")
                 .content("content")
                 .build();
@@ -51,14 +51,14 @@ class ArticleServiceTest {
         // given
         Member member = createMemberInfoDto().toEntity();
 
-        PostSaveRequest postSaveRequest = createPostSaveRequest();
-        Article article = postSaveRequest.toEntity(member);
+        ArticleSaveRequest articleSaveRequest = createPostSaveRequest();
+        Article article = articleSaveRequest.toEntity(member);
 
         given(memberRepository.findByNickname("nickname")).willReturn(Optional.of(member));
         given(articleRepository.save(article)).willReturn(article);
 
         // when
-        Long id = articleService.save(postSaveRequest, "nickname");
+        Long id = articleService.save(articleSaveRequest, "nickname");
 
         // then
         assertThat(member.getArticles().size()).isEqualTo(1);

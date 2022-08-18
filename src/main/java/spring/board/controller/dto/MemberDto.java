@@ -1,7 +1,6 @@
 package spring.board.controller.dto;
 
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import spring.board.domain.member.Member;
 import spring.board.domain.member.Role;
 
@@ -85,12 +84,12 @@ public class MemberDto {
 
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @Getter
-    public static class PostMemberInfo {
+    public static class ArticleMemberInfo {
 
         private String nickname;
 
         @Builder
-        public PostMemberInfo(String nickname) {
+        public ArticleMemberInfo(String nickname) {
             this.nickname = nickname;
         }
     }

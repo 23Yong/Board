@@ -6,10 +6,10 @@
     <div class="py-5 text-center">
         <h3>게시글 정보 수정</h3>
     </div>
-    <form role="form" th:object="${postForm}" th:action="@{/posts/{postId}/edit(postId = ${postForm.postId})}" th:method="article">
+    <form role="form" th:object="${articleForm}" th:action="@{/templates/articles/{postId}/edit(postId = ${articleForm.getArticleId})}" th:method="article">
         <div class="form-label">
             <label for="id">게시물 번호</label>
-            <input type="text" id="id" th:field="*{postId}"
+            <input type="text" id="id" th:field="*{getArticleId}"
                    readonly />
         </div>
         <div>
@@ -27,7 +27,7 @@
             <div th:errors="*{content}" class="field-error">내용 오류</div>
         </div>
     </form>
-    <a th:href="|@{/posts/{postId}(postId = ${postForm.postId})}|"
+    <a th:href="|@{/templates/articles/{postId}(postId = ${articleForm.getArticleId})}|"
        role="button" class="btn btn-secondary">취소</a>
     <button class="btn btn-primary" id="btn-update">수정</button>
 
