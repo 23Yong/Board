@@ -1,7 +1,7 @@
 package spring.board.domain.article;
 
 import lombok.*;
-import spring.board.domain.BaseEntity;
+import spring.board.domain.AuditingFields;
 import spring.board.domain.articlecomment.ArticleComment;
 import spring.board.domain.member.Member;
 
@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
         @Index(columnList = "createdBy")
 })
 @Entity
-public class Article extends BaseEntity {
+public class Article extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
