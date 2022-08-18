@@ -6,16 +6,16 @@ import spring.board.domain.articlecomment.ArticleComment;
 import spring.board.domain.member.Member;
 
 import java.time.LocalDateTime;
-public class ReplyDto {
+public class ArticleCommentDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplySaveRequest {
+    public static class ArticleCommentSaveRequest {
 
         private String content;
 
         @Builder
-        public ReplySaveRequest(String content) {
+        public ArticleCommentSaveRequest(String content) {
             this.content = content;
         }
 
@@ -24,7 +24,7 @@ public class ReplyDto {
                     .content(content)
                     .build();
 
-            articleComment.addPost(article);
+            articleComment.addArticle(article);
             articleComment.addWriter(member);
             return articleComment;
         }
@@ -32,13 +32,13 @@ public class ReplyDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyUpdateRequest {
+    public static class ArticleCommentUpdateRequest {
 
         private Long id;
         private String content;
 
         @Builder
-        public ReplyUpdateRequest(Long id, String content) {
+        public ArticleCommentUpdateRequest(Long id, String content) {
             this.id = id;
             this.content = content;
         }
@@ -46,19 +46,19 @@ public class ReplyDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyDeleteRequest {
+    public static class ArticleCommentDeleteRequest {
 
         private Long id;
 
         @Builder
-        public ReplyDeleteRequest(Long id) {
+        public ArticleCommentDeleteRequest(Long id) {
             this.id = id;
         }
     }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ReplyInfo {
+    public static class ArticleCommentInfo {
 
         private Long id;
         private String content;
@@ -66,7 +66,7 @@ public class ReplyDto {
         private LocalDateTime createdTime;
 
         @Builder
-        public ReplyInfo(Long id, String content, String nickname, LocalDateTime createdTime) {
+        public ArticleCommentInfo(Long id, String content, String nickname, LocalDateTime createdTime) {
             this.id = id;
             this.content = content;
             this.nickname = nickname;

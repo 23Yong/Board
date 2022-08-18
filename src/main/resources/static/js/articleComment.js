@@ -30,7 +30,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/posts/'+id+'/reply',
+            url: '/api/articles/'+id+'/articleComment',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -56,7 +56,7 @@ var main = {
         if (con_check === true) {
             $.ajax({
                 type: 'PUT',
-                url: '/api/posts/' + id + '/reply',
+                url: '/api/articles/' + id + '/articleComment',
                 dataType: 'JSON',
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data)
@@ -79,7 +79,7 @@ var main = {
         if (con_check === true) {
             $.ajax({
                 type: 'DELETE',
-                url: '/api/posts/' + id + '/reply',
+                url: '/api/articles/' + id + '/articleComment',
                 dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(data)

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static spring.board.controller.dto.MemberDto.*;
-import static spring.board.controller.dto.PostDto.*;
+import static spring.board.controller.dto.ArticleDto.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,11 +24,11 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(@LoginCheck Member loginMember, Model model, Pageable pageable) {
-        Page<PostInfo> posts = articleService.findAllPosts(pageable);
-        List<PostInfo> postInfoList = posts.stream().collect(Collectors.toList());
+        Page<ArticleInfo> articles = articleService.findAllArticles(pageable);
+        List<ArticleInfo> articleInfoList = articles.stream().collect(Collectors.toList());
 
-        model.addAttribute("posts", postInfoList);
-        model.addAttribute("postPage", posts);
+        model.addAttribute("articles", articleInfoList);
+        model.addAttribute("articlePage", articles);
 
         if (loginMember == null) {
             return "home";

@@ -6,9 +6,9 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 
 @Getter @Setter
-public class PostEditForm {
+public class ArticleEditForm {
 
-    private Long postId;
+    private Long articleId;
     @NotEmpty(message = "게시글의 제목은 반드시 있어야 합니다.")
     private String title;
     @NotEmpty(message = "게시글의 내용은 반드시 있어야 합니다.")

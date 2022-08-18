@@ -1,31 +1,31 @@
-package spring.board.controller.api.post;
+package spring.board.controller.api.article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.domain.member.Member;
 import spring.board.service.ArticleService;
 import spring.board.service.ArticleCommentService;
-import static spring.board.controller.dto.PostDto.*;
-import static spring.board.controller.dto.ReplyDto.*;
+import static spring.board.controller.dto.ArticleDto.*;
+import static spring.board.controller.dto.ArticleCommentDto.*;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/api/articles")
 @RestController
-public class PostApiController {
+public class ArticleApiController {
 
     private final ArticleService articleService;
 
     private final ArticleCommentService articleCommentService;
 
     @PostMapping("/new")
-    public Long save(@RequestBody PostSaveRequest requestDto,
+    public Long save(@RequestBody ArticleSaveRequest requestDto,
                      @LoginCheck Member member) {
 
         return articleService.save(requestDto, member.getNickname());
     }
 
     @PutMapping("/{id}")
-    public Long update(@RequestBody PostUpdateRequest requestDto) {
+    public Long update(@RequestBody ArticleUpdateRequest requestDto) {
         return articleService.update(requestDto);
     }
 
@@ -34,18 +34,18 @@ public class PostApiController {
         return articleService.delete(id);
     }
 
-    @PostMapping("/{id}/reply")
-    public Long writeReply(@RequestBody ReplySaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
+    @PostMapping("/{id}/articleComment")
+    public Long writeArticleComment(@RequestBody ArticleCommentSaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
         return articleCommentService.save(request, id, member);
     }
 
-    @PutMapping("/{id}/reply")
-    public Long updateReply(@RequestBody ReplyUpdateRequest request) {
+    @PutMapping("/{id}/articleComment")
+    public Long updateArticleComment(@RequestBody ArticleCommentUpdateRequest request) {
         return articleCommentService.update(request);
     }
 
-    @DeleteMapping("/{id}/reply")
-    public Long deleteReply(@RequestBody ReplyDeleteRequest request) {
+    @DeleteMapping("/{id}/articleComment")
+    public Long deleteArticleComment(@RequestBody ArticleCommentDeleteRequest request) {
         return articleCommentService.delete(request);
     }
 }

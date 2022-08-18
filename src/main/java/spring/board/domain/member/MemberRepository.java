@@ -1,12 +1,14 @@
 package spring.board.domain.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 import spring.board.common.security.consts.OauthType;
 import spring.board.domain.member.Member;
 
 import java.util.Optional;
 
+@RepositoryRestResource
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByLoginId(String loginId);

@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
 import spring.board.domain.member.Member;
 import spring.board.exception.member.UserNotFoundException;
-import spring.board.exception.post.PostNotFoundException;
+import spring.board.exception.article.ArticleNotFoundException;
 import spring.board.domain.member.MemberRepository;
 import spring.board.domain.article.ArticleRepository;
 
-import static spring.board.controller.dto.PostDto.*;
+import static spring.board.controller.dto.ArticleDto.*;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,7 +24,7 @@ public class ArticleService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long save(PostSaveRequest requestDto, String nickname) {
+    public Long save(ArticleSaveRequest requestDto, String nickname) {
         Member member = memberRepository.findByNickname(nickname)
                 .orElseThrow(() -> new UserNotFoundException("찾으려는 회원이 없습니다."));
 
@@ -35,9 +35,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public Long update(PostUpdateRequest request) {
+    public Long update(ArticleUpdateRequest request) {
         Article article = articleRepository.findById(request.getId())
-                .orElseThrow(() -> new PostNotFoundException("찾으려는 게시물이 없습니다."));
+                .orElseThrow(() -> new ArticleNotFoundException("찾으려는 게시물이 없습니다."));
 
         article.changeArticle(request.getTitle(), request.getContent());
         return article.getId();
@@ -49,16 +49,16 @@ public class ArticleService {
         return id;
     }
 
-    public Article findPost(Long postId) {
-        return articleRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException("해당 아이디를 가진 게시글이 존재하지 않습니다."));
+    public Article findArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new ArticleNotFoundException("해당 아이디를 가진 게시글이 존재하지 않습니다."));
     }
 
-    public Page<PostInfo> findAllPosts(Pageable pageable) {
+    public Page<ArticleInfo> findAllArticles(Pageable pageable) {
         int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber()-1);
         pageable = PageRequest.of(page, 10);
 
         return articleRepository.findAll(pageable)
-                .map(PostInfo::new);
+                .map(ArticleInfo::new);
     }
 }

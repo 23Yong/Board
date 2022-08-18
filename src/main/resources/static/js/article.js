@@ -21,7 +21,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/posts/new',
+            url: '/api/articles/new',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -43,13 +43,13 @@ var main = {
 
         $.ajax({
             type: 'PUT',
-            url: '/api/posts/' + id,
+            url: '/api/articles/' + id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function () {
             alert('글이 수정되었습니다.');
-            window.location.href = '/posts/' + id;
+            window.location.href = '/articles/' + id;
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -59,7 +59,7 @@ var main = {
 
         $.ajax({
             type: 'DELETE',
-            url: '/api/posts/' + id,
+            url: '/api/articles/' + id,
             dataType: 'json',
             contentType: 'application/json; charset=UTF-8',
         }).done(function () {

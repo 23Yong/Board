@@ -55,7 +55,7 @@ public class ArticleComment extends AuditingFields {
     public void addWriter(Member writer) {
         this.writer = writer;
     }
-    public void addPost(Article article) {
+    public void addArticle(Article article) {
         article.addArticleComment(this);
         this.article = article;
     }

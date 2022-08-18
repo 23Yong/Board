@@ -7,17 +7,17 @@
         <h3>게시판</h3>
     </div>
 
-    <div th:object="${postInfo}">
+    <div th:object="${articleInfo}">
         <div class="row mb-4">
             <div class="collapse">
                 <label for="id"></label>
-                <input th:value="*{postId}" id="id" readonly />
+                <input th:value="*{articleId}" id="id" readonly />
             </div>
             <div class="col">
                 제목: <span th:text="*{title}"></span>
             </div>
             <div class="col">
-                작성자: <span th:text="*{postMemberInfo.nickname}" id="nickname"></span>
+                작성자: <span th:text="*{articleMemberInfo.nickname}" id="nickname"></span>
             </div>
         </div>
         <div>
@@ -83,7 +83,7 @@
         </div>
     </div>
     <div class="row">
-        <a th:href="|@{/posts/{postId}/edit(postId = ${postInfo.postId})}|"
+        <a th:href="|@{/templates/articles/{postId}/edit(postId = ${articleInfo.getArticleId})}|"
            role="button" class="col btn btn-primary w-100 m-3">게시글 수정하기</a>
         <button class="col btn btn-danger w-100 m-3" id="btn-delete">삭제</button>
         <a href="/"

@@ -5,7 +5,7 @@
     <ul class="pagination"
         th:with="start=${T(Math).floor(replies.number/10)*10 + 1},last=(${start + 9 < replies.totalPages ? start + 9 : replies.totalPages})">
         <li class="page-item">
-            <a class="page-link" th:href="@{/posts/{id} (id = ${postInfo.postId}, page=1)}" aria-label="First">
+            <a class="page-link" th:href="@{/templates/articles/{id} (id = ${postInfo.postId}, page=1)}" aria-label="First">
                 <span aria-hidden="true">First</span>
             </a>
         </li>
@@ -21,7 +21,7 @@
         </li>
 
         <li th:unless="${last==0}" class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:class="${page == replies.number + 1} ? 'active'">
-            <a class="page-link" th:text="${page}" th:href="@{/posts/{id} (id = ${postInfo.postId}, page=${page})}"></a>
+            <a class="page-link" th:text="${page}" th:href="@{/templates/articles/{id} (id = ${postInfo.postId}, page=${page})}"></a>
         </li>
 
         <li class="page-item" th:class="${replies.last} ? 'disabled'">
@@ -31,7 +31,7 @@
         </li>
 
         <li class="page-item">
-            <a class="page-link" th:href="@{/posts/{id} (id = ${postInfo.postId}, page=${replies.totalPages})}" aria-label="Last">
+            <a class="page-link" th:href="@{/templates/articles/{id} (id = ${postInfo.postId}, page=${replies.totalPages})}" aria-label="Last">
                 <span aria-hidden="true">Last</span>
             </a>
         </li>

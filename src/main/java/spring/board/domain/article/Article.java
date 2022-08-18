@@ -43,7 +43,7 @@ public class Article extends AuditingFields {
 
     public void setMember(Member member) {
         this.member = member;
-        member.addPost(this);
+        member.addArticle(this);
     }
 
     @Builder
