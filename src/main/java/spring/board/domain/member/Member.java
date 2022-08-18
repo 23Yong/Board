@@ -2,7 +2,7 @@ package spring.board.domain.member;
 
 import lombok.*;
 import spring.board.common.security.consts.OauthType;
-import spring.board.domain.BaseEntity;
+import spring.board.domain.AuditingFields;
 import spring.board.domain.MyPage;
 import spring.board.domain.article.Article;
 import spring.board.domain.articlecomment.ArticleComment;
@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member extends BaseEntity {
+public class Member extends AuditingFields {
 
     @Id @GeneratedValue
     @Column(name = "member_id", nullable = false)
