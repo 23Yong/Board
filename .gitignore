@@ -42,3 +42,6 @@ bootstrap.*
 *.map
 
 application-oauth.yml
+
+### QueryDSL ###
+src/main/generated
