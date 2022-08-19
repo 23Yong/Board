@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.form.ArticleEditForm;
@@ -12,6 +13,8 @@ import spring.board.domain.member.Member;
 import spring.board.domain.article.Article;
 import spring.board.service.ArticleService;
 import spring.board.service.ArticleCommentService;
+
+import java.util.List;
 
 import static spring.board.controller.dto.MemberDto.*;
 import static spring.board.controller.dto.ArticleDto.*;
@@ -24,6 +27,12 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleCommentService articleCommentService;
+
+    @GetMapping
+    public String articles(ModelMap map) {
+        map.addAttribute("articles", List.of());
+        return "articles/index";
+    }
 
     @GetMapping("/new")
     public String createArticleForm(@ModelAttribute(name = "articleForm") ArticleForm articleForm) {
