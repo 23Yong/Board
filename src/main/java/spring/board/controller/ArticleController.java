@@ -16,10 +16,10 @@ import spring.board.service.ArticleCommentService;
 import static spring.board.controller.dto.MemberDto.*;
 import static spring.board.controller.dto.ArticleDto.*;
 
-@Controller
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping("/articles")
+@Controller
 public class ArticleController {
 
     private final ArticleService articleService;
