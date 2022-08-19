@@ -7,13 +7,9 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import spring.board.common.SessionConst;
 import spring.board.common.annotation.LoginCheck;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.service.LoginService;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 @RequiredArgsConstructor
 @Component
@@ -24,7 +20,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasLoginCheckAnnotation = parameter.hasParameterAnnotation(LoginCheck.class);
-        boolean hasMemberType = Member.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasMemberType = UserAccount.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginCheckAnnotation && hasMemberType;
     }

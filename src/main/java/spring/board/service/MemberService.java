@@ -1,20 +1,17 @@
 package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.board.common.SessionConst;
 import spring.board.common.security.oauth.dto.OAuthAttributes;
 import spring.board.controller.dto.MemberDto;
 import spring.board.controller.dto.MemberDto.PasswordUpdateRequest;
 import spring.board.controller.dto.MemberDto.MemberSaveRequest;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.Role;
 import spring.board.exception.member.DuplicatedMemberException;
-import spring.board.exception.member.UnauthenticatedUserException;
 import spring.board.exception.member.UserNotFoundException;
-import spring.board.domain.member.MemberRepository;
+import spring.board.domain.member.UserRepository;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,54 +22,54 @@ import static spring.board.common.SessionConst.*;
 @Service
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     private final HttpSession session;
 
     @Transactional
     public Long save(MemberSaveRequest requestDto) {
-        if (memberRepository.existsByLoginId(requestDto.getLoginId())) {
+        if (userRepository.existsByLoginId(requestDto.getUserId())) {
             throw DuplicatedMemberException.createDuplicatedMemberException();
         }
 
-        Member member = requestDto.toEntity();
-        member.addMyPage();
-        memberRepository.save(member);
-        return member.getId();
+        UserAccount userAccount = requestDto.toEntity();
+        userAccount.addMyPage();
+        userRepository.save(userAccount);
+        return userAccount.getId();
     }
 
-    public Member findByLoginId(String loginId) {
-        Member member = memberRepository.findByLoginId(loginId)
+    public UserAccount findByLoginId(String loginId) {
+        UserAccount userAccount = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
 
-        return member;
+        return userAccount;
     }
 
     @Transactional
     public Long updateNickname(MemberDto.MemberUpdateRequest requestDto, String loginId) {
         String nickname = requestDto.getNickname();
 
-        Member member = memberRepository.findByLoginId(loginId)
+        UserAccount userAccount = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
 
-        member.updateNickname(nickname);
+        userAccount.updateNickname(nickname);
 
-        session.setAttribute(SESSION_LOGIN, member);
-        return member.getId();
+        session.setAttribute(SESSION_LOGIN, userAccount);
+        return userAccount.getId();
     }
 
     @Transactional
     public Long updatePassword(String loginId, PasswordUpdateRequest requestDto) {
-        Member member = memberRepository.findByLoginId(loginId)
+        UserAccount userAccount = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new UserNotFoundException("해당 아이디를 가진 회원이 존재하지 않습니다."));
 
-        session.setAttribute(SESSION_LOGIN, member);
-        return member.getId();
+        session.setAttribute(SESSION_LOGIN, userAccount);
+        return userAccount.getId();
     }
 
     @Transactional
-    public Member saveOrUpdate(OAuthAttributes attributes) {
-        Member member = memberRepository.findByEmail(attributes.getEmail())
+    public UserAccount saveOrUpdate(OAuthAttributes attributes) {
+        UserAccount userAccount = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> {
                     entity.updateNickname(attributes.getName());
                     entity.updateProfileImageUrl(attributes.getPicture());
@@ -81,6 +78,6 @@ public class MemberService {
                 })
                 .orElse(attributes.toEntity());
 
-        return memberRepository.save(member);
+        return userRepository.save(userAccount);
     }
 }

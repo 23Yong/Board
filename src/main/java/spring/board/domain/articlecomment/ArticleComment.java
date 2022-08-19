@@ -3,7 +3,7 @@ package spring.board.domain.articlecomment;
 import lombok.*;
 import spring.board.domain.AuditingFields;
 import spring.board.domain.article.Article;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 
 import javax.persistence.*;
 
@@ -30,8 +30,8 @@ public class ArticleComment extends AuditingFields {
     private String content;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member writer;
+    @JoinColumn(name = "user_account_id")
+    private UserAccount writer;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "article_id")
@@ -52,7 +52,7 @@ public class ArticleComment extends AuditingFields {
         this.content = content;
     }
 
-    public void addWriter(Member writer) {
+    public void addWriter(UserAccount writer) {
         this.writer = writer;
     }
     public void addArticle(Article article) {

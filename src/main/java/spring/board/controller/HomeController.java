@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import spring.board.common.annotation.LoginCheck;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.service.ArticleService;
 
 import java.util.List;
@@ -23,20 +23,20 @@ public class HomeController {
     private final ArticleService articleService;
 
     @GetMapping("/")
-    public String home(@LoginCheck Member loginMember, Model model, Pageable pageable) {
+    public String home(@LoginCheck UserAccount loginUserAccount, Model model, Pageable pageable) {
         Page<ArticleInfo> articles = articleService.findAllArticles(pageable);
         List<ArticleInfo> articleInfoList = articles.stream().collect(Collectors.toList());
 
         model.addAttribute("articles", articleInfoList);
         model.addAttribute("articlePage", articles);
 
-        if (loginMember == null) {
+        if (loginUserAccount == null) {
             return "home";
         }
 
         MemberInfo member = MemberInfo.builder()
-                .loginId(loginMember.getLoginId())
-                .nickname(loginMember.getNickname())
+                .userId(loginUserAccount.getUserId())
+                .nickname(loginUserAccount.getNickname())
                 .build();
 
         model.addAttribute("member", member);

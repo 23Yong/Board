@@ -3,7 +3,7 @@ package spring.board.domain.article;
 import lombok.*;
 import spring.board.domain.AuditingFields;
 import spring.board.domain.articlecomment.ArticleComment;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 
 import javax.persistence.*;
 import java.util.*;
@@ -35,15 +35,15 @@ public class Article extends AuditingFields {
     private String hashtag;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_account_id")
+    private UserAccount userAccount;
 
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private List<ArticleComment> articleComments = new ArrayList<>();
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.addArticle(this);
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+        userAccount.addArticle(this);
     }
 
     @Builder

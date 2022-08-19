@@ -9,12 +9,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import spring.board.common.SessionConst;
 import spring.board.common.security.oauth.dto.OAuthAttributes;
-import spring.board.domain.member.Member;
-import spring.board.domain.member.MemberRepository;
-import spring.board.domain.member.Role;
+import spring.board.domain.member.UserAccount;
 import spring.board.service.MemberService;
 
 import javax.servlet.http.HttpSession;
@@ -41,12 +38,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        Member member = memberService.saveOrUpdate(attributes);
+        UserAccount userAccount = memberService.saveOrUpdate(attributes);
 
-        httpSession.setAttribute(SessionConst.SESSION_LOGIN, member);
+        httpSession.setAttribute(SessionConst.SESSION_LOGIN, userAccount);
 
         return new DefaultOAuth2User(
-                Collections.singleton(new SimpleGrantedAuthority(member.getRole().getKey())),
+                Collections.singleton(new SimpleGrantedAuthority(userAccount.getRole().getKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey()
         );

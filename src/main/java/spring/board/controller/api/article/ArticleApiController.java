@@ -2,7 +2,7 @@ package spring.board.controller.api.article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.service.ArticleService;
 import spring.board.service.ArticleCommentService;
 import static spring.board.controller.dto.ArticleDto.*;
@@ -19,9 +19,9 @@ public class ArticleApiController {
 
     @PostMapping("/new")
     public Long save(@RequestBody ArticleSaveRequest requestDto,
-                     @LoginCheck Member member) {
+                     @LoginCheck UserAccount userAccount) {
 
-        return articleService.save(requestDto, member.getNickname());
+        return articleService.save(requestDto, userAccount.getNickname());
     }
 
     @PutMapping("/{id}")
@@ -35,8 +35,8 @@ public class ArticleApiController {
     }
 
     @PostMapping("/{id}/articleComment")
-    public Long writeArticleComment(@RequestBody ArticleCommentSaveRequest request, @PathVariable Long id, @LoginCheck Member member) {
-        return articleCommentService.save(request, id, member);
+    public Long writeArticleComment(@RequestBody ArticleCommentSaveRequest request, @PathVariable Long id, @LoginCheck UserAccount userAccount) {
+        return articleCommentService.save(request, id, userAccount);
     }
 
     @PutMapping("/{id}/articleComment")

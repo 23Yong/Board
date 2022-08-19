@@ -10,23 +10,23 @@ import java.util.Collection;
 @AllArgsConstructor
 public class MemberDetails implements UserDetails {
 
-    private Member member;
+    private UserAccount userAccount;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> "ROLE_" + member.getRole());
+        authorities.add(() -> "ROLE_" + userAccount.getRole());
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return userAccount.getUserPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getLoginId();
+        return userAccount.getUserId();
     }
 
     @Override

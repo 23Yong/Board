@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.domain.articlecomment.ArticleComment;
 import spring.board.exception.article.ArticleNotFoundException;
 import spring.board.exception.reply.ReplyNotFoundException;
@@ -26,11 +26,11 @@ public class ArticleCommentService {
     private final spring.board.domain.article.ArticleRepository articleRepository;
 
     @Transactional
-    public Long save(ArticleCommentSaveRequest requestDto, Long articleId, Member member) {
+    public Long save(ArticleCommentSaveRequest requestDto, Long articleId, UserAccount userAccount) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new ArticleNotFoundException("찾으려는 게시글이 없습니다."));
 
-        ArticleComment articleComment = requestDto.toEntity(article, member);
+        ArticleComment articleComment = requestDto.toEntity(article, userAccount);
         articleCommentRepository.save(articleComment);
         return articleComment.getId();
     }
