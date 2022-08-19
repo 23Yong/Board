@@ -52,8 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                     .authorizeRequests()
-                        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/login", "/members/new")
-                            .permitAll()
+                        .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/login", "/members/new", "/articles/**").permitAll()
                         .antMatchers("/api/**", "members/{loginId:[\\w+]}/**").hasRole(Role.USER.name())
                         .anyRequest()
                             .authenticated()
@@ -72,9 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint);
 
-        http
+        /*http
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+                .userService(customOAuth2UserService);*/
     }
 }
