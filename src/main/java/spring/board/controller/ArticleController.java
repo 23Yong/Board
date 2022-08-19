@@ -39,10 +39,10 @@ public class ArticleController {
         return "/articles/createArticleForm";
     }
 
-    @GetMapping("/{id}")
-    public String getArticleInfo(@PathVariable Long id, @LoginCheck Member member,
-                                 Model model, Pageable pageable) {
-        Article findArticle = articleService.findArticle(id);
+    @GetMapping("/{articleId}")
+    public String getArticleInfo(@PathVariable Long articleId, @LoginCheck Member member,
+                                 ModelMap map, Pageable pageable) {
+        Article findArticle = articleService.findArticle(articleId);
         Member findArticleMember = findArticle.getMember();
 
         ArticleMemberInfo memberInfo = ArticleMemberInfo.builder()
@@ -50,16 +50,15 @@ public class ArticleController {
                 .build();
 
         ArticleDetailInfo articleDetailInfo = ArticleDetailInfo.builder()
-                .articleId(id)
+                .articleId(articleId)
                 .title(findArticle.getTitle())
                 .content(findArticle.getContent())
                 .articleMemberInfo(memberInfo)
                 .build();
 
-        model.addAttribute("articleInfo", articleDetailInfo);
-        model.addAttribute("loginMember", member);
-        model.addAttribute("replies", articleCommentService.findAllReplies(pageable, id));
-        return "/articles/ArticleInfo";
+        map.addAttribute("article", "article"); // TODO: 실제 데이터를 넣어줘야 한다.
+        map.addAttribute("articleComments", List.of());
+        return "/articles/detail";
     }
 
     @GetMapping("/{articleId}/edit")
