@@ -1,7 +1,7 @@
 package spring.board.controller.dto;
 import lombok.*;
 import spring.board.domain.article.Article;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 
 import java.time.LocalDateTime;
 import static spring.board.controller.dto.MemberDto.*;
@@ -16,12 +16,12 @@ public class ArticleDto {
             this.title = title;
             this.content = content;
         }
-        public Article toEntity(Member member) {
+        public Article toEntity(UserAccount userAccount) {
             Article article = Article.builder()
                     .title(title)
                     .content(content)
                     .build();
-            article.setMember(member);
+            article.setUserAccount(userAccount);
             return article;
         }
     }

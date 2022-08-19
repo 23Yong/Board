@@ -3,13 +3,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import spring.board.common.annotation.LoginCheck;
 import spring.board.controller.form.ArticleEditForm;
 import spring.board.controller.form.ArticleForm;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.domain.article.Article;
 import spring.board.service.ArticleService;
 import spring.board.service.ArticleCommentService;
@@ -40,13 +39,13 @@ public class ArticleController {
     }
 
     @GetMapping("/{articleId}")
-    public String getArticleInfo(@PathVariable Long articleId, @LoginCheck Member member,
+    public String getArticleInfo(@PathVariable Long articleId, @LoginCheck UserAccount userAccount,
                                  ModelMap map, Pageable pageable) {
         Article findArticle = articleService.findArticle(articleId);
-        Member findArticleMember = findArticle.getMember();
+        UserAccount findArticleUserAccount = findArticle.getUserAccount();
 
         ArticleMemberInfo memberInfo = ArticleMemberInfo.builder()
-                .nickname(findArticleMember.getNickname())
+                .nickname(findArticleUserAccount.getNickname())
                 .build();
 
         ArticleDetailInfo articleDetailInfo = ArticleDetailInfo.builder()

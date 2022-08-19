@@ -1,7 +1,7 @@
 package spring.board.controller.dto;
 
 import lombok.*;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.Role;
 
 public class MemberDto {
@@ -10,18 +10,18 @@ public class MemberDto {
     @Getter
     public static class MemberInfo {
 
-        private String loginId;
+        private String userId;
         private String nickname;
 
         @Builder
-        public MemberInfo(String loginId, String nickname) {
-            this.loginId = loginId;
+        public MemberInfo(String userId, String nickname) {
+            this.userId = userId;
             this.nickname = nickname;
         }
 
-        public Member toEntity() {
-            return Member.builder()
-                    .loginId(loginId)
+        public UserAccount toEntity() {
+            return UserAccount.builder()
+                    .userId(userId)
                     .nickname(nickname)
                     .build();
         }
@@ -32,25 +32,25 @@ public class MemberDto {
     public static class MemberSaveRequest {
 
         private String email;
-        private String loginId;
-        private String password;
+        private String userId;
+        private String userPassword;
         private String nickname;
         private Role role;
 
         @Builder
-        public MemberSaveRequest(String email, String loginId, String password, String nickname) {
+        public MemberSaveRequest(String email, String userId, String userPassword, String nickname) {
             this.email = email;
-            this.loginId = loginId;
-            this.password = password;
+            this.userId = userId;
+            this.userPassword = userPassword;
             this.nickname = nickname;
             this.role = Role.USER;
         }
 
-        public Member toEntity() {
-            return Member.builder()
+        public UserAccount toEntity() {
+            return UserAccount.builder()
                     .email(email)
-                    .loginId(loginId)
-                    .password(password)
+                    .userId(userId)
+                    .userPassword(userPassword)
                     .nickname(nickname)
                     .role(role)
                     .build();

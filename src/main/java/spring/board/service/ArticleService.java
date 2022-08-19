@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.article.ArticleNotFoundException;
-import spring.board.domain.member.MemberRepository;
+import spring.board.domain.member.UserRepository;
 import spring.board.domain.article.ArticleRepository;
 
 import static spring.board.controller.dto.ArticleDto.*;
@@ -21,15 +21,15 @@ import static spring.board.controller.dto.ArticleDto.*;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long save(ArticleSaveRequest requestDto, String nickname) {
-        Member member = memberRepository.findByNickname(nickname)
+        UserAccount userAccount = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new UserNotFoundException("찾으려는 회원이 없습니다."));
 
-        Article article = articleRepository.save(requestDto.toEntity(member));
-        article.setMember(member);
+        Article article = articleRepository.save(requestDto.toEntity(userAccount));
+        article.setUserAccount(userAccount);
 
         return article.getId();
     }

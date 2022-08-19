@@ -53,7 +53,7 @@
                             <span style="font-size: xx-small" th:text="${articleComment.createdTime}"></span>
                         </span>
 
-                        <form th:if="${loginMember.nickname} == ${articleComment.nickname}"
+                        <form th:if="${loginUserAccount.nickname} == ${articleComment.nickname}"
                               th:id="'replyDetailBtn-'+${articleComment.id}" style="display: inline">
                             <input type="hidden" id="btn-replyId" th:value="${articleComment.id}" readonly>
                             <a role="button" data-toggle="collapse" th:href="'#replyUpdateArea-'+${articleComment.id}"

@@ -3,7 +3,7 @@ package spring.board.common.security.oauth.dto;
 import lombok.Builder;
 import lombok.Getter;
 import spring.board.common.security.consts.OauthType;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.exception.auth.InvalidOauthTypeException;
 
 import java.util.Map;
@@ -43,7 +43,7 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public Member toEntity() {
-        return Member.createOauth(nameAttributeKey, name, email, picture, OauthType.GOOGLE);
+    public UserAccount toEntity() {
+        return UserAccount.createOauth(nameAttributeKey, name, email, picture, OauthType.GOOGLE);
     }
 }

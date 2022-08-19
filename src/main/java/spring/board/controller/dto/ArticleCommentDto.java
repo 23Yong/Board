@@ -3,7 +3,7 @@ package spring.board.controller.dto;
 import lombok.*;
 import spring.board.domain.article.Article;
 import spring.board.domain.articlecomment.ArticleComment;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 
 import java.time.LocalDateTime;
 public class ArticleCommentDto {
@@ -19,13 +19,13 @@ public class ArticleCommentDto {
             this.content = content;
         }
 
-        public ArticleComment toEntity(Article article, Member member) {
+        public ArticleComment toEntity(Article article, UserAccount userAccount) {
             ArticleComment articleComment = ArticleComment.builder()
                     .content(content)
                     .build();
 
             articleComment.addArticle(article);
-            articleComment.addWriter(member);
+            articleComment.addWriter(userAccount);
             return articleComment;
         }
     }

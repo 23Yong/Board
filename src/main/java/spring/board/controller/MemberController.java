@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import spring.board.controller.form.MemberEditForm;
 import spring.board.controller.form.MemberForm;
 import spring.board.controller.form.PasswordEditForm;
-import spring.board.domain.member.Member;
+import spring.board.domain.member.UserAccount;
 import spring.board.service.MemberService;
 
 import static spring.board.controller.dto.MemberDto.*;
@@ -47,10 +47,10 @@ public class MemberController {
 
     @GetMapping("members/{loginId}/myPage")
     public String myPage(@PathVariable String loginId, Model model) {
-        Member findMember = memberService.findByLoginId(loginId);
+        UserAccount findUserAccount = memberService.findByLoginId(loginId);
         MemberInfo member = MemberInfo.builder()
-                .loginId(findMember.getLoginId())
-                .nickname(findMember.getNickname())
+                .loginId(findUserAccount.getUserId())
+                .nickname(findUserAccount.getNickname())
                 .build();
         model.addAttribute("member", member);
 
