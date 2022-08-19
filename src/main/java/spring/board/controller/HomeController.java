@@ -35,7 +35,7 @@ public class HomeController {
         }
 
         MemberInfo member = MemberInfo.builder()
-                .loginId(loginUserAccount.getUserId())
+                .userId(loginUserAccount.getUserId())
                 .nickname(loginUserAccount.getNickname())
                 .build();
 

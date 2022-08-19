@@ -26,7 +26,7 @@ import static javax.persistence.FetchType.LAZY;
 public class UserAccount extends AuditingFields {
 
     @Id @GeneratedValue
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "user_account_id", nullable = false)
     private Long id;
 
     @Column(nullable = false, length = 50)

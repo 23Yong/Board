@@ -36,8 +36,8 @@ public class MemberController {
 
         MemberSaveRequest saveRequest = MemberSaveRequest.builder()
                 .email(memberForm.getEmail())
-                .loginId(memberForm.getLoginId())
-                .password(memberForm.getPassword())
+                .userId(memberForm.getLoginId())
+                .userPassword(memberForm.getPassword())
                 .nickname(memberForm.getNickname())
                 .build();
 
@@ -49,7 +49,7 @@ public class MemberController {
     public String myPage(@PathVariable String loginId, Model model) {
         UserAccount findUserAccount = memberService.findByLoginId(loginId);
         MemberInfo member = MemberInfo.builder()
-                .loginId(findUserAccount.getUserId())
+                .userId(findUserAccount.getUserId())
                 .nickname(findUserAccount.getNickname())
                 .build();
         model.addAttribute("member", member);

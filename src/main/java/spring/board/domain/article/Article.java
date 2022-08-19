@@ -35,7 +35,7 @@ public class Article extends AuditingFields {
     private String hashtag;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)

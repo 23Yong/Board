@@ -30,7 +30,7 @@ public class ArticleComment extends AuditingFields {
     private String content;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_account_id")
     private UserAccount writer;
 
     @ManyToOne(fetch = LAZY)
