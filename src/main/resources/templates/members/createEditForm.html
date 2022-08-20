@@ -17,7 +17,7 @@
     <form role="form" th:object="${userAccount}" th:action="@{/members/{loginId}/edit(loginId = ${userAccount.loginId})}" th:method="article">
         <div>
             <label for="loginId">아이디</label>
-            <input id="loginId" class="form-control" th:value="${loginId}" th:placeholder="${loginId}" disabled />
+            <input id="loginId" class="form-control" th:value="${userId}" th:placeholder="${userId}" disabled />
         </div>
         <div>
             <label for="nickname">닉네임</label>
