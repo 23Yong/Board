@@ -1,15 +1,17 @@
 package spring.board.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import spring.board.domain.member.UserAccount;
-import spring.board.domain.member.MemberDetails;
-import spring.board.domain.member.UserRepository;
+import spring.board.domain.member.UserAccountRepository;
 
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
 
 import static spring.board.common.SessionConst.*;
 
@@ -18,15 +20,16 @@ import static spring.board.common.SessionConst.*;
 public class LoginService implements UserDetailsService {
 
     private final HttpSession session;
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        UserAccount userAccount = userRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new UsernameNotFoundException("찾으려는 회원이 없습니다. : " + loginId));
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        UserAccount userAccount = userAccountRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("찾으려는 회원이 없습니다. : " + userId));
 
         session.setAttribute(SESSION_LOGIN, userAccount);
-        return new MemberDetails(userAccount);
+        return new User(userAccount.getUserId(), userAccount.getUserPassword(), List.of());
+
     }
 
     public UserAccount getLoginMember() {

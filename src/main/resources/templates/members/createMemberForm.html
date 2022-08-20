@@ -16,17 +16,17 @@
         </div>
         <div>
             <label for="loginId">아아디</label>
-            <input type="text" id="loginId" th:field="*{loginId}"
+            <input type="text" id="loginId" th:field="*{getUserId}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="로그인 아이디를 입력해주세요" />
-            <div th:errors="*{loginId}" class="field-error">아이디 오류</div>
+            <div th:errors="*{getUserId}" class="field-error">아이디 오류</div>
         </div>
         <div>
             <label for="password">비밀번호</label>
-            <input type="password" id="password" th:field="*{password}"
+            <input type="password" id="password" th:field="*{getUserPassword}"
                    th:errorclass="field-error"
                    class="form-control" placeholder="비밀번호를 입력해주세요" />
-            <div th:errors="*{password}" class="field-error">패스워드 오류</div>
+            <div th:errors="*{getUserPassword}" class="field-error">패스워드 오류</div>
         </div>
         <div>
             <label for="nickname">닉네임</label>

@@ -10,7 +10,7 @@ import spring.board.domain.article.Article;
 import spring.board.domain.member.UserAccount;
 import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.article.ArticleNotFoundException;
-import spring.board.domain.member.UserRepository;
+import spring.board.domain.member.UserAccountRepository;
 import spring.board.domain.article.ArticleRepository;
 
 import static spring.board.controller.dto.ArticleDto.*;
@@ -21,11 +21,11 @@ import static spring.board.controller.dto.ArticleDto.*;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Transactional
     public Long save(ArticleSaveRequest requestDto, String nickname) {
-        UserAccount userAccount = userRepository.findByNickname(nickname)
+        UserAccount userAccount = userAccountRepository.findByNickname(nickname)
                 .orElseThrow(() -> new UserNotFoundException("찾으려는 회원이 없습니다."));
 
         Article article = articleRepository.save(requestDto.toEntity(userAccount));

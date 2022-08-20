@@ -6,15 +6,13 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.Optional;
 
 @RepositoryRestResource
-public interface UserRepository extends JpaRepository<UserAccount, Long> {
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
 
-    Optional<UserAccount> findByLoginId(String loginId);
+    Optional<UserAccount> findByUserId(String userId);
 
     Optional<UserAccount> findByNickname(String nickname);
 
     Optional<UserAccount> findByEmail(String email);
 
-    boolean existsByLoginId(String loginId);
-
-    boolean existsByLoginIdAndPassword(String loginId, String password);
+    boolean existsByUserId(String userId);
 }

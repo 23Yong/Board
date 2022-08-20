@@ -1,7 +1,6 @@
 package spring.board.controller.api.member;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,17 +19,17 @@ public class MemberApiController {
 
     private final AuthenticationManager authenticationManager;
 
-    @PutMapping("/{loginId}")
-    public Long updateNickname(@RequestBody MemberUpdateRequest requestDto, @PathVariable String loginId) {
-        return memberService.updateNickname(requestDto, loginId);
+    @PutMapping("/{userId}")
+    public Long updateNickname(@RequestBody MemberUpdateRequest requestDto, @PathVariable String userId) {
+        return memberService.updateNickname(requestDto, userId);
     }
 
-    @PutMapping("/{loginId}/password")
-    public Long updatePassword(@RequestBody PasswordUpdateRequest requestDto, @PathVariable String loginId) {
-        Long id =  memberService.updatePassword(loginId, requestDto);
+    @PutMapping("/{userId}/password")
+    public Long updatePassword(@RequestBody PasswordUpdateRequest requestDto, @PathVariable String userId) {
+        Long id =  memberService.updatePassword(userId, requestDto);
 
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginId, requestDto.getAfterPassword())
+                new UsernamePasswordAuthenticationToken(userId, requestDto.getAfterPassword())
         );
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
