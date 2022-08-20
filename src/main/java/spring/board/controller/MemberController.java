@@ -36,8 +36,8 @@ public class MemberController {
 
         MemberSaveRequest saveRequest = MemberSaveRequest.builder()
                 .email(memberForm.getEmail())
-                .userId(memberForm.getLoginId())
-                .userPassword(memberForm.getPassword())
+                .userId(memberForm.getUserId())
+                .userPassword(memberForm.getUserPassword())
                 .nickname(memberForm.getNickname())
                 .build();
 
@@ -45,9 +45,9 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("members/{loginId}/myPage")
-    public String myPage(@PathVariable String loginId, Model model) {
-        UserAccount findUserAccount = memberService.findByLoginId(loginId);
+    @GetMapping("members/{userId}/myPage")
+    public String myPage(@PathVariable String userId, Model model) {
+        UserAccount findUserAccount = memberService.findByUserId(userId);
         MemberInfo member = MemberInfo.builder()
                 .userId(findUserAccount.getUserId())
                 .nickname(findUserAccount.getNickname())
@@ -57,17 +57,17 @@ public class MemberController {
         return "members/my-page/myPage";
     }
 
-    @GetMapping("members/{loginId}/edit")
-    public String createEditForm(@PathVariable String loginId,
+    @GetMapping("members/{userId}/edit")
+    public String createEditForm(@PathVariable String userId,
             @ModelAttribute(name = "member") MemberEditForm memberEditForm) {
-        memberEditForm.setLoginId(loginId);
+        memberEditForm.setUserId(userId);
         return "members/createEditForm";
     }
 
-    @GetMapping("members/{loginId}/edit/password")
-    public String createPasswordEditForm(@PathVariable String loginId,
+    @GetMapping("members/{userId}/edit/password")
+    public String createPasswordEditForm(@PathVariable String userId,
             @ModelAttribute(name = "passwordForm") PasswordEditForm passwordEditForm) {
-        passwordEditForm.setLoginId(loginId);
+        passwordEditForm.setUserId(userId);
         return "members/createPasswordEditForm";
     }
 }
