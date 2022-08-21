@@ -7,7 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
+import spring.board.domain.article.SearchType;
 import spring.board.domain.member.UserAccount;
+import spring.board.dto.ArticleDto;
+import spring.board.dto.ArticleUpdateDto;
 import spring.board.exception.member.UserNotFoundException;
 import spring.board.exception.article.ArticleNotFoundException;
 import spring.board.domain.member.UserAccountRepository;
@@ -60,5 +63,28 @@ public class ArticleService {
 
         return articleRepository.findAll(pageable)
                 .map(ArticleInfo::new);
+    }
+
+    public Page<ArticleDto> searchArticles(SearchType title, String searchKeyword) {
+        return Page.empty();
+    }
+
+    public ArticleDto searchArticle(long articleId) {
+        return null;
+    }
+
+    @Transactional
+    public void updateArticle(ArticleDto dto) {
+
+    }
+
+    @Transactional
+    public void updateArticle(long articleId, ArticleUpdateDto dto) {
+
+    }
+
+    @Transactional
+    public void deleteArticle(long articleId) {
+
     }
 }
