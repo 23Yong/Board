@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import spring.board.domain.article.Article;
+import spring.board.domain.member.UserAccount;
 import spring.board.dto.ArticleCommentDto;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.articlecomment.ArticleComment;
@@ -37,8 +38,9 @@ class ArticleCommentServiceTest {
     void givenArticleId_whenSearchingArticleComments_thenReturnsArticleComments() {
         // given
         Long articleId = 1L;
+        UserAccount userAccount = UserAccount.of("23Yong", "pw", null, null, null);
         given(articleRepository.findById(articleId))
-                .willReturn(Optional.of(Article.of("title", "content", "#Java")));
+                .willReturn(Optional.of(Article.of(userAccount, "title", "content", "#Java")));
 
         // when
         List<ArticleCommentDto> articleComments = sut.searchArticleComments(articleId);

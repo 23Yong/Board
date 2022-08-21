@@ -7,10 +7,6 @@ logging:
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace  # binding parameter 관찰
 
-spring:
-  profiles:
-    include: oauth
-
   datasource:
     url: jdbc:mysql://localhost:3306/board
     username: 23Yong
@@ -28,23 +24,9 @@ spring:
         format_sql: true
         default_batch_fetch_size: 100
   sql.init.mode: always
+
   data.rest:
     base-path: /api
     detection-strategy: annotated
 
-  devtools:
-    livereload:
-      enabled: true
-    thymeleaf:
-      cache: false
-
-  thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
   thymeleaf3.decoupled-logic: true
-
-server:
-  servlet:
-    session:
-      timeout: 30m
-      tracking-modes: cookie

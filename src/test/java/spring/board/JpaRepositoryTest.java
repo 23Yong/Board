@@ -9,6 +9,8 @@ import spring.board.common.config.JpaConfig;
 import spring.board.domain.article.Article;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.articlecomment.ArticleCommentRepository;
+import spring.board.domain.member.UserAccount;
+import spring.board.domain.member.UserAccountRepository;
 
 import java.util.List;
 
@@ -21,12 +23,15 @@ class JpaRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
-            @Autowired ArticleCommentRepository articleCommentRepository) {
+            @Autowired ArticleCommentRepository articleCommentRepository,
+            @Autowired UserAccountRepository userAccountRepository) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @DisplayName("select 테스트")
@@ -48,7 +53,8 @@ class JpaRepositoryTest {
     void givenTestData_whenInserting_thenWorksFine() {
         // given
         long previousCount = articleRepository.count();
-        Article article = Article.of("new Article", "new Content", "#Spring");
+        UserAccount userAccount = UserAccount.of("23Yong", "password", null, null, null);
+        Article article = Article.of(userAccount, "new Article", "new Content", "#Spring");
 
         // when
         articleRepository.save(article);
