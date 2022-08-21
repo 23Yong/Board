@@ -10,9 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.articlecomment.ArticleComment;
+import spring.board.dto.ArticleCommentDto;
+import spring.board.dto.ArticleCommentUpdateDto;
 import spring.board.exception.article.ArticleNotFoundException;
 import spring.board.exception.reply.ReplyNotFoundException;
 import spring.board.domain.articlecomment.ArticleCommentRepository;
+
+import java.util.List;
 
 import static spring.board.controller.dto.ArticleCommentDto.*;
 
@@ -67,5 +71,24 @@ public class ArticleCommentService {
                 .createdTime(reply.getCreatedAt())
                 .build()
         );
+    }
+
+    public List<ArticleCommentDto> searchArticleComments(Long articleId) {
+        return List.of();
+    }
+
+    @Transactional
+    public void saveArticleComment(ArticleCommentDto dto) {
+
+    }
+
+    @Transactional
+    public void updateArticleComment(long articleCommentId, ArticleCommentUpdateDto dto) {
+
+    }
+
+    @Transactional
+    public void deleteArticleComment(long articleCommentId) {
+
     }
 }
