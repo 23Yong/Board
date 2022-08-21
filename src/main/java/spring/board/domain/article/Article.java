@@ -34,12 +34,12 @@ public class Article extends AuditingFields {
 
     private String hashtag;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<ArticleComment> articleComments = new ArrayList<>();
+    private Set<ArticleComment> articleComments = new HashSet<>();
 
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
@@ -53,14 +53,15 @@ public class Article extends AuditingFields {
         this.content = content;
     }
 
-    private Article(String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
+        return new Article(userAccount, title, content, hashtag);
     }
 
     public void changeArticle(String title, String content) {

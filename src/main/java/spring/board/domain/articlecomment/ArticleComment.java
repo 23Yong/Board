@@ -29,21 +29,22 @@ public class ArticleComment extends AuditingFields {
     @Column(nullable = false, length = 500)
     private String content;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "user_account_id")
-    private UserAccount writer;
+    private UserAccount userAccount;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    private ArticleComment(String content, Article article) {
+    private ArticleComment(UserAccount userAccount, String content, Article article) {
+        this.userAccount = userAccount;
         this.content = content;
         this.article = article;
     }
 
-    public static ArticleComment of(String content, Article article) {
-        return new ArticleComment(content, article);
+    public static ArticleComment of(UserAccount userAccount, String content, Article article) {
+        return new ArticleComment(userAccount, content, article);
     }
 
     @Builder
@@ -53,7 +54,7 @@ public class ArticleComment extends AuditingFields {
     }
 
     public void addWriter(UserAccount writer) {
-        this.writer = writer;
+        this.userAccount = writer;
     }
     public void addArticle(Article article) {
         article.addArticleComment(this);
