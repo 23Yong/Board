@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.dto.ArticleCommentDto;
-import spring.board.dto.ArticleCommentUpdateDto;
 import spring.board.domain.articlecomment.ArticleCommentRepository;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class ArticleCommentService {
     }
 
     @Transactional
-    public void updateArticleComment(long articleCommentId, ArticleCommentUpdateDto dto) {
+    public void updateArticleComment(ArticleCommentDto dto) {
 
     }
 

@@ -38,6 +38,7 @@ public class Article extends AuditingFields {
     @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<ArticleComment> articleComments = new HashSet<>();
 
