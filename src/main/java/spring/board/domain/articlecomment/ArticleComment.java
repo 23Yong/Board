@@ -23,18 +23,15 @@ public class ArticleComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "article_comment_id")
     private Long id;
 
     @Column(nullable = false, length = 500)
     private String content;
 
     @ManyToOne(fetch = LAZY, optional = false)
-    @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "article_id")
+    @ManyToOne(fetch = LAZY, optional = false)
     private Article article;
 
     private ArticleComment(UserAccount userAccount, String content, Article article) {
@@ -50,17 +47,6 @@ public class ArticleComment extends AuditingFields {
     @Builder
     public ArticleComment(Long id, String content) {
         this.id = id;
-        this.content = content;
-    }
-
-    public void addWriter(UserAccount writer) {
-        this.userAccount = writer;
-    }
-    public void addArticle(Article article) {
-        article.addArticleComment(this);
-        this.article = article;
-    }
-    public void editReply(String content) {
         this.content = content;
     }
 
