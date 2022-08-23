@@ -21,8 +21,8 @@ import java.util.Objects;
 @Entity
 public class UserAccount extends AuditingFields {
 
-    @Id @GeneratedValue
-    @Column(name = "user_account_id", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 50)

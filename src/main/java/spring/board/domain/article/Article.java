@@ -23,7 +23,6 @@ public class Article extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "article_id")
     private Long id;
 
     @Column(nullable = false)
@@ -35,16 +34,11 @@ public class Article extends AuditingFields {
     private String hashtag;
 
     @ManyToOne(fetch = LAZY, optional = false)
-    @JoinColumn(name = "user_account_id")
     private UserAccount userAccount;
 
+    @OrderBy("createdAt DESC")
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<ArticleComment> articleComments = new HashSet<>();
-
-    public void setUserAccount(UserAccount userAccount) {
-        this.userAccount = userAccount;
-        userAccount.addArticle(this);
-    }
 
     @Builder
     public Article(Long id, String title, String content) {
@@ -64,17 +58,16 @@ public class Article extends AuditingFields {
         return new Article(userAccount, title, content, hashtag);
     }
 
-    public void changeArticle(String title, String content) {
+    public void changeTitle(String title) {
         this.title = title;
+    }
+
+    public void changeContent(String content) {
         this.content = content;
     }
 
     public void changeHashtag(String hashtag) {
         this.hashtag = hashtag;
-    }
-
-    public void addArticleComment(ArticleComment articleComment) {
-        articleComments.add(articleComment);
     }
 
     @Override
