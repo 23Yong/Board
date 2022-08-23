@@ -72,7 +72,9 @@ class ArticleControllerTest {
     void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // given
         Long articeId = 1L;
+        long totalCount = 1L;
         given(articleService.getArticle(articeId)).willReturn(createArticleWithCommentsDto());
+        given(articleService.getArticleCount()).willReturn(totalCount);
 
         // when & then
         mvc.perform(get("/articles/" + articeId))
@@ -80,9 +82,11 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attribute("totalCount", totalCount));
 
         then(articleService).should().getArticle(articeId);
+        then(articleService).should().getArticleCount();
     }
 
     @DisplayName("[View] [GET] 게시글 검색 전용 페이지 - 정상호출")
