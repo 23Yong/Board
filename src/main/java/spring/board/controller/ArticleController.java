@@ -12,6 +12,9 @@ import spring.board.domain.article.SearchType;
 import spring.board.dto.response.ArticleResponse;
 import spring.board.dto.response.ArticleWithCommentsResponse;
 import spring.board.service.ArticleService;
+import spring.board.service.PaginationService;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ import spring.board.service.ArticleService;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final PaginationService paginationService;
 
     @GetMapping
     public String articles(
@@ -30,7 +34,11 @@ public class ArticleController {
     ) {
         Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable)
                 .map(ArticleResponse::from);
+        List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+
         map.addAttribute("articles", articles);
+        map.addAttribute("paginationBarNumbers", barNumbers);
+
         return "articles/index";
     }
 
@@ -39,6 +47,7 @@ public class ArticleController {
         ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponses());
+        map.addAttribute("totalCount", articleService.getArticleCount());
         return "articles/detail";
     }
 }
