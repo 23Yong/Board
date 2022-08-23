@@ -1,13 +1,17 @@
 package spring.board.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import spring.board.domain.article.SearchType;
+import spring.board.dto.response.ArticleResponse;
+import spring.board.dto.response.ArticleWithCommentsResponse;
 import spring.board.service.ArticleService;
-import spring.board.service.ArticleCommentService;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,18 +20,25 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final ArticleCommentService articleCommentService;
 
     @GetMapping
-    public String articles(ModelMap map) {
-        map.addAttribute("articles", List.of());
+    public String articles(
+            @RequestParam(required = false) SearchType searchType,
+            @RequestParam(required = false) String searchValue,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            ModelMap map
+    ) {
+        Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable)
+                .map(ArticleResponse::from);
+        map.addAttribute("articles", articles);
         return "articles/index";
     }
 
     @GetMapping("/{articleId}")
     public String getArticleInfo(@PathVariable Long articleId, ModelMap map) {
-        map.addAttribute("article", "article"); // TODO: 실제 데이터를 넣어줘야 한다.
-        map.addAttribute("articleComments", List.of());
-        return "/articles/detail";
+        ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticle(articleId));
+        map.addAttribute("article", article);
+        map.addAttribute("articleComments", article.articleCommentsResponses());
+        return "articles/detail";
     }
 }
