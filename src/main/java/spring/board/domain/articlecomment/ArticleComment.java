@@ -34,6 +34,10 @@ public class ArticleComment extends AuditingFields {
     @ManyToOne(fetch = LAZY, optional = false)
     private Article article;
 
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
     private ArticleComment(UserAccount userAccount, String content, Article article) {
         this.userAccount = userAccount;
         this.content = content;
@@ -42,12 +46,6 @@ public class ArticleComment extends AuditingFields {
 
     public static ArticleComment of(UserAccount userAccount, String content, Article article) {
         return new ArticleComment(userAccount, content, article);
-    }
-
-    @Builder
-    public ArticleComment(Long id, String content) {
-        this.id = id;
-        this.content = content;
     }
 
     @Override
