@@ -52,7 +52,7 @@ public class ArticleService {
 
     @Transactional
     public void saveArticle(ArticleDto dto) {
-        UserAccount userAccount = userAccountRepository.getReferenceByUserId(dto.userAccountDto().userId());
+        UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
         articleRepository.save(dto.toEntity(userAccount));
     }
 

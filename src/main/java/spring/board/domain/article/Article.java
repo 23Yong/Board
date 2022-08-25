@@ -34,6 +34,7 @@ public class Article extends AuditingFields {
     private String hashtag;
 
     @ManyToOne(fetch = LAZY, optional = false)
+    @JoinColumn(name = "userId")
     private UserAccount userAccount;
 
     @OrderBy("createdAt DESC")
