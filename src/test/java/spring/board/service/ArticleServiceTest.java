@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import spring.board.domain.article.Article;
-import spring.board.domain.article.SearchType;
+import spring.board.domain.constants.SearchType;
 import spring.board.domain.member.UserAccount;
 import spring.board.dto.ArticleDto;
 import spring.board.domain.article.ArticleRepository;
@@ -105,7 +105,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.of(article));
 
         // When
-        ArticleWithCommentsDto dto = sut.getArticle(articleId);
+        ArticleWithCommentsDto dto = sut.getArticleWithComments(articleId);
 
         // Then
         assertThat(dto)
@@ -123,7 +123,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.empty());
 
         // When
-        Throwable t = catchThrowable(() -> sut.getArticle(articleId));
+        Throwable t = catchThrowable(() -> sut.getArticleWithComments(articleId));
 
         // Then
         assertThat(t)
@@ -155,7 +155,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
 
         // When
-        sut.updateArticle(dto);
+        sut.updateArticle(dto.id(), dto);
 
         // Then
         assertThat(article)
@@ -173,7 +173,7 @@ class ArticleServiceTest {
         given(articleRepository.getReferenceById(dto.id())).willThrow(EntityNotFoundException.class);
 
         // When
-        sut.updateArticle(dto);
+        sut.updateArticle(dto.id(), dto);
 
         // Then
         then(articleRepository).should().getReferenceById(dto.id());

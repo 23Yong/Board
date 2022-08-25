@@ -7,9 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
-import spring.board.domain.article.SearchType;
-import spring.board.dto.ArticleDto;
+import spring.board.domain.constants.SearchType;
+import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
+import spring.board.dto.ArticleDto;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.dto.ArticleWithCommentsDto;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
         if (searchKeyword == null || searchKeyword.isBlank()) {
@@ -42,7 +44,7 @@ public class ArticleService {
         };
     }
 
-    public ArticleWithCommentsDto getArticle(Long articleId) {
+    public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleWithCommentsDto::from)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
@@ -50,13 +52,14 @@ public class ArticleService {
 
     @Transactional
     public void saveArticle(ArticleDto dto) {
-        articleRepository.save(dto.toEntity());
+        UserAccount userAccount = userAccountRepository.getReferenceByUserId(dto.userAccountDto().userId());
+        articleRepository.save(dto.toEntity(userAccount));
     }
 
     @Transactional
-    public void updateArticle(ArticleDto dto) {
+    public void updateArticle(Long articleId, ArticleDto dto) {
         try {
-            Article article = articleRepository.getReferenceById(dto.id());
+            Article article = articleRepository.getReferenceById(articleId);
             if (dto.title() != null) {
                 article.changeTitle(dto.title());
             }
@@ -88,5 +91,11 @@ public class ArticleService {
 
     public List<String> getHashtags() {
         return articleRepository.findAllDistinctHashtags();
+    }
+
+    public ArticleDto getArticle(Long articleId) {
+        return articleRepository.findById(articleId)
+                .map(ArticleDto::from)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다. - articleId: " + articleId));
     }
 }

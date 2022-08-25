@@ -1,4 +1,4 @@
-package spring.board.domain.article;
+package spring.board.domain.constants;
 
 import lombok.Getter;
 
