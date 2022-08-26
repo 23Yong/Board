@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import spring.board.domain.article.Article;
 import spring.board.domain.member.UserAccount;
+import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleCommentDto;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.articlecomment.ArticleComment;
@@ -32,6 +33,8 @@ class ArticleCommentServiceTest {
     private ArticleCommentRepository articleCommentRepository;
     @Mock
     private ArticleRepository articleRepository;
+    @Mock
+    private UserAccountRepository userAccountRepository;
 
     @DisplayName("게시글 ID로 조회하면 해당하는 댓글 리스트를 반환한다.")
     @Test
@@ -57,6 +60,7 @@ class ArticleCommentServiceTest {
         // given
         ArticleCommentDto dto = createArticleCommentDto("comment");
         given(articleRepository.getReferenceById(dto.articleId())).willReturn(createArticle());
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(createUserAccount());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
         // when
@@ -64,6 +68,7 @@ class ArticleCommentServiceTest {
 
         // then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
@@ -79,6 +84,7 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.articleId());
+        then(userAccountRepository).shouldHaveNoInteractions();
         then(articleCommentRepository).shouldHaveNoInteractions();
     }
 
@@ -120,13 +126,8 @@ class ArticleCommentServiceTest {
     private ArticleCommentDto createArticleCommentDto(String content) {
         return ArticleCommentDto.of(
                 1L,
-                1L,
                 createUserAccountDto(),
-                content,
-                LocalDateTime.now(),
-                "23Yong",
-                LocalDateTime.now(),
-                "23Yong"
+                content
         );
     }
 
