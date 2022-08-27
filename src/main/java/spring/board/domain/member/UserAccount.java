@@ -13,7 +13,6 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
-        @Index(columnList = "userId", unique = true),
         @Index(columnList = "email", unique = true),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
@@ -60,13 +59,13 @@ public class UserAccount extends AuditingFields {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(userId);
+        return Objects.hash(userId);
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof UserAccount userAccount)) return false;
-        return userId != null && obj.equals(userAccount.userId);
+        if (!(obj instanceof UserAccount that)) return false;
+        return userId != null && userId.equals(that.userId);
     }
 }
