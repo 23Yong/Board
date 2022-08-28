@@ -56,9 +56,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
-    @Bean(name = "mvcHandlerMappingIntrospector")
-    public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
-        return new HandlerMappingIntrospector();
-    }
 }
