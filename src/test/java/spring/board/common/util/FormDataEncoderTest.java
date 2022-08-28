@@ -1,6 +1,7 @@
 package spring.board.common.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ class FormDataEncoderTest {
         this.formDataEncoder = formDataEncoder;
     }
 
+    @Disabled
     @DisplayName("객체를 넣으면 url encoding 된 form body data 형식의 문자열을 돌려준다.")
     @Test
     void givenObject_whenEncoding_thenReturnsFormEncodedData() {
