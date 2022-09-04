@@ -26,7 +26,6 @@ class FormDataEncoderTest {
 
     @Disabled
     @DisplayName("객체를 넣으면 url encoding 된 form body data 형식의 문자열을 돌려준다.")
-    @Test
     void givenObject_whenEncoding_thenReturnsFormEncodedData() {
         // given
         TestObject obj = new TestObject(
