@@ -23,6 +23,7 @@ import spring.board.domain.constants.FormStatus;
 import spring.board.domain.constants.SearchType;
 import spring.board.dto.ArticleDto;
 import spring.board.dto.ArticleWithCommentsDto;
+import spring.board.dto.HashtagDto;
 import spring.board.dto.UserAccountDto;
 import spring.board.dto.request.ArticleRequest;
 import spring.board.service.ArticleService;
@@ -182,8 +183,9 @@ class ArticleControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/search-hashtag"))
                 .andExpect(model().attribute("articles", Page.empty()))
-                .andExpect(model().attributeExists("hashtags"))
-                .andExpect(model().attributeExists("paginationBarNumbers"));
+                .andExpect(model().attribute("hashtags", hashtags))
+                .andExpect(model().attributeExists("paginationBarNumbers"))
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG));
 
         then(articleService).should().searchArticlesViaHashtag(eq(hashtag), any(Pageable.class));
         then(articleService).should().getHashtags();
@@ -223,7 +225,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view] [GET] 새 게시글 작성 페이지")
     @Test
-    void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception{
+    void givenNoting_whenRequesting_thenReturnsNewArticlePage() throws Exception{
         // given
 
         // when & then
@@ -239,7 +241,7 @@ class ArticleControllerTest {
     @Test
     void givenNewArticleInfo_whenRequesting_thenSaveNewArticle() throws Exception{
         // given
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).saveArticle(any(ArticleDto.class));
 
         // when & then
@@ -273,7 +275,7 @@ class ArticleControllerTest {
     @WithUserDetails(value = "23YongTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view] [GET] 게시글 수정 페이지 - 정상 호출, 인증된 사용자")
     @Test
-    void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
+    void givenAuthorizedUser_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         // given
         long articleId = 1L;
         ArticleDto articleDto = createArticleDto();
@@ -294,7 +296,7 @@ class ArticleControllerTest {
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         // given
         long articleId = 1L;
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).updateArticle(eq(articleId), any(ArticleDto.class));
 
         // when & then
@@ -338,7 +340,7 @@ class ArticleControllerTest {
                 createUserAccountDto(),
                 "title",
                 "content",
-                "#Java"
+                Set.of(HashtagDto.of("java"))
         );
     }
 
@@ -349,7 +351,7 @@ class ArticleControllerTest {
                 Set.of(),
                 "title",
                 "content",
-                "#Java",
+                Set.of(HashtagDto.of("java")),
                 LocalDateTime.now(),
                 "23Yong",
                 LocalDateTime.now(),
