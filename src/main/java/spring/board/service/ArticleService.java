@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
 import spring.board.domain.constants.SearchType;
+import spring.board.domain.hashtag.Hashtag;
+import spring.board.domain.hashtag.HashtagRepository;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleDto;
@@ -15,7 +17,10 @@ import spring.board.domain.article.ArticleRepository;
 import spring.board.dto.ArticleWithCommentsDto;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +30,9 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final UserAccountRepository userAccountRepository;
+    private final HashtagRepository hashtagRepository;
+
+    private final HashtagService hashtagService;
 
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
         if (searchKeyword == null || searchKeyword.isBlank()) {
@@ -39,7 +47,10 @@ public class ArticleService {
                     .map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable)
                     .map(ArticleDto::from);
-            case HASHTAG -> articleRepository.findByHashtag("#" + searchKeyword, pageable)
+            case HASHTAG -> articleRepository.findByHashtagNames(
+                    Arrays.stream(searchKeyword.split(" ")).toList(),
+                    pageable
+            )
                     .map(ArticleDto::from);
         };
     }
@@ -69,7 +80,6 @@ public class ArticleService {
                 if (dto.content() != null) {
                     article.changeContent(dto.content());
                 }
-                article.changeHashtag(dto.hashtag());
             }
         } catch (EntityNotFoundException e) {
             log.warn("게시글 업데이트 실패, 게시글을 수정하는데 필요한 정보를 찾을 수 없습니다. - {}", e.getLocalizedMessage());
@@ -78,7 +88,15 @@ public class ArticleService {
 
     @Transactional
     public void deleteArticle(long articleId, String userId) {
+        Article article = articleRepository.getReferenceById(articleId);
+        Set<Long> hashtagIds = article.getHashtags().stream()
+                .map(Hashtag::getId)
+                .collect(Collectors.toUnmodifiableSet());
+
         articleRepository.deleteByIdAndUserAccount_UserId(articleId, userId);
+        articleRepository.flush();
+
+        hashtagIds.forEach(hashtagService::deleteHashtagWithoutArticles);
     }
 
     public long getArticleCount() {
@@ -90,11 +108,11 @@ public class ArticleService {
             return Page.empty(pageable);
         }
 
-        return articleRepository.findByHashtag(hashtag, pageable).map(ArticleDto::from);
+        return articleRepository.findByHashtagNames(null, pageable).map(ArticleDto::from);
     }
 
     public List<String> getHashtags() {
-        return articleRepository.findAllDistinctHashtags();
+        return hashtagRepository.findAllHashtagNames();
     }
 
     public ArticleDto getArticle(Long articleId) {

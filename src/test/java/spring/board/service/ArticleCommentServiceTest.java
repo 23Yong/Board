@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import spring.board.domain.article.Article;
+import spring.board.domain.hashtag.Hashtag;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleCommentDto;
@@ -18,6 +19,7 @@ import spring.board.dto.UserAccountDto;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -150,7 +152,7 @@ class ArticleCommentServiceTest {
         return ArticleComment.of(
                 createUserAccount(),
                 content,
-                Article.of(createUserAccount(), "title", "content", "#Java")
+                createArticle()
         );
     }
 
@@ -164,12 +166,18 @@ class ArticleCommentServiceTest {
         );
     }
 
+    private Hashtag createHashtag(Article article) {
+        return Hashtag.of("java");
+    }
+
     private Article createArticle() {
-        return Article.of(
+        Article article = Article.of(
                 createUserAccount(),
                 "title",
-                "content",
-                "#Java"
+                "content"
         );
+        article.addHashtags(Set.of(createHashtag(article)));
+
+        return article;
     }
 }

@@ -3,6 +3,7 @@ package spring.board.domain.article;
 import lombok.*;
 import spring.board.domain.AuditingFields;
 import spring.board.domain.articlecomment.ArticleComment;
+import spring.board.domain.hashtag.Hashtag;
 import spring.board.domain.member.UserAccount;
 
 import javax.persistence.*;
@@ -14,7 +15,6 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
         @Index(columnList = "title"),
-        @Index(columnList = "hashtag"),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
@@ -31,8 +31,6 @@ public class Article extends AuditingFields {
     @Column(length = 10000, nullable = false)
     private String content;
 
-    private String hashtag;
-
     @ManyToOne(fetch = LAZY, optional = false)
     @JoinColumn(name = "userId")
     private UserAccount userAccount;
@@ -41,6 +39,14 @@ public class Article extends AuditingFields {
     @OneToMany(mappedBy = "article", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Set<ArticleComment> articleComments = new HashSet<>();
 
+    @JoinTable(
+            name = "article_hashtag",
+            joinColumns = @JoinColumn(name = "articleId"),
+            inverseJoinColumns = @JoinColumn(name = "hashtagId")
+    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Hashtag> hashtags = new LinkedHashSet<>();
+
     @Builder
     public Article(Long id, String title, String content) {
         this.id = id;
@@ -48,15 +54,18 @@ public class Article extends AuditingFields {
         this.content = content;
     }
 
-    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content) {
         this.userAccount = userAccount;
         this.title = title;
         this.content = content;
-        this.hashtag = hashtag;
     }
 
-    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
-        return new Article(userAccount, title, content, hashtag);
+    public static Article of(UserAccount userAccount, String title, String content) {
+        return new Article(userAccount, title, content);
+    }
+
+    public void changeUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     public void changeTitle(String title) {
@@ -67,8 +76,16 @@ public class Article extends AuditingFields {
         this.content = content;
     }
 
-    public void changeHashtag(String hashtag) {
-        this.hashtag = hashtag;
+    public void addHashtag(Hashtag hashtag) {
+        this.getHashtags().add(hashtag);
+    }
+
+    public void addHashtags(Collection<Hashtag> hashtags) {
+        this.getHashtags().addAll(hashtags);
+    }
+
+    public void clearHashtags() {
+        this.getHashtags().clear();
     }
 
     @Override
