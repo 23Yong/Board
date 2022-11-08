@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
     runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'mysql:mysql-connector-java'
