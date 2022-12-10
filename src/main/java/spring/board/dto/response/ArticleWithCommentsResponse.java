@@ -4,9 +4,11 @@ import spring.board.dto.ArticleCommentDto;
 import spring.board.dto.ArticleWithCommentsDto;
 import spring.board.dto.HashtagDto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

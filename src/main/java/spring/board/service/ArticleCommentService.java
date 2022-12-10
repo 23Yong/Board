@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.articlecomment.ArticleComment;
+import spring.board.domain.articlecomment.ArticleCommentRepository;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleCommentDto;
-import spring.board.domain.articlecomment.ArticleCommentRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;

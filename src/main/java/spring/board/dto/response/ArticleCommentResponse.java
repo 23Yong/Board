@@ -2,7 +2,6 @@ package spring.board.dto.response;
 
 import spring.board.dto.ArticleCommentDto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Set;

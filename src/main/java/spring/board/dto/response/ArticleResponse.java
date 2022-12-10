@@ -3,7 +3,6 @@ package spring.board.dto.response;
 import spring.board.dto.ArticleDto;
 import spring.board.dto.HashtagDto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
