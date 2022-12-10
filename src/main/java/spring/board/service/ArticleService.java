@@ -7,13 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
+import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.constants.SearchType;
 import spring.board.domain.hashtag.Hashtag;
 import spring.board.domain.hashtag.HashtagRepository;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleDto;
-import spring.board.domain.article.ArticleRepository;
 import spring.board.dto.ArticleWithCommentsDto;
 
 import javax.persistence.EntityNotFoundException;

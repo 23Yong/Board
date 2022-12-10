@@ -1,7 +1,6 @@
 package spring.board.dto;
 
 import spring.board.domain.article.Article;
-import spring.board.domain.hashtag.Hashtag;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
