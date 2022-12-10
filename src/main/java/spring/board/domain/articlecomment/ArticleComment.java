@@ -7,7 +7,9 @@ import spring.board.domain.member.UserAccount;
 
 import javax.persistence.*;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static javax.persistence.FetchType.*;
 
@@ -28,6 +30,15 @@ public class ArticleComment extends AuditingFields {
     @Column(nullable = false, length = 500)
     private String content;
 
+    @Setter
+    @Column(updatable = false)
+    private Long parentCommentId;
+
+    @ToString.Exclude
+    @OrderBy("createdAt ASC")
+    @OneToMany(mappedBy = "parentCommentId", cascade = CascadeType.ALL)
+    private Set<ArticleComment> childComments  = new LinkedHashSet<>();
+
     @JoinColumn(name = "userId")
     @ManyToOne(fetch = LAZY, optional = false)
     private UserAccount userAccount;
@@ -39,14 +50,20 @@ public class ArticleComment extends AuditingFields {
         this.content = content;
     }
 
-    private ArticleComment(UserAccount userAccount, String content, Article article) {
+    public void addChildComment(ArticleComment child) {
+        child.setParentCommentId(this.getId());
+        this.getChildComments().add(child);
+    }
+
+    private ArticleComment(UserAccount userAccount, String content, Long parentCommentId, Article article) {
         this.userAccount = userAccount;
         this.content = content;
+        this.parentCommentId = parentCommentId;
         this.article = article;
     }
 
     public static ArticleComment of(UserAccount userAccount, String content, Article article) {
-        return new ArticleComment(userAccount, content, article);
+        return new ArticleComment(userAccount, content, null, article);
     }
 
     @Override

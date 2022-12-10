@@ -7,10 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.domain.article.Article;
 import spring.board.domain.article.ArticleRepository;
 import spring.board.domain.articlecomment.ArticleComment;
+import spring.board.domain.articlecomment.ArticleCommentRepository;
 import spring.board.domain.member.UserAccount;
 import spring.board.domain.member.UserAccountRepository;
 import spring.board.dto.ArticleCommentDto;
-import spring.board.domain.articlecomment.ArticleCommentRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -37,7 +37,14 @@ public class ArticleCommentService {
         try {
             Article article = articleRepository.getReferenceById(dto.articleId());
             UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
-            articleCommentRepository.save(dto.toEntity(article, userAccount));
+            ArticleComment articleComment = dto.toEntity(article, userAccount);
+
+            if (dto.parentCommentId() != null) {
+                ArticleComment parentComment = articleCommentRepository.getReferenceById(dto.parentCommentId());
+                parentComment.addChildComment(articleComment);
+            } else {
+                articleCommentRepository.save(articleComment);
+            }
         } catch (EntityNotFoundException e) {
             log.warn("댓글 저장 실패. 댓글 작성에 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage());
         }

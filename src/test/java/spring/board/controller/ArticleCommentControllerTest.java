@@ -2,7 +2,6 @@ package spring.board.controller;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -11,9 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import spring.board.common.config.SecurityConfig;
 import spring.board.common.util.FormDataEncoder;
 import spring.board.config.TestSecurityConfig;
 import spring.board.dto.ArticleCommentDto;
@@ -22,10 +18,9 @@ import spring.board.service.ArticleCommentService;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("View 컨트롤러 - 댓글")
@@ -91,5 +86,28 @@ class ArticleCommentControllerTest {
                 .andExpect(redirectedUrl("/articles/" + articleId));
 
         then(articleCommentService).should().deleteArticleComment(articleCommentId, userId);
+    }
+
+    @WithUserDetails(value = "23YongTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    @DisplayName("[view] [POST] 대댓글 등록 - 정상 호출")
+    @Test
+    void givenArticleCommentInfoWithParentCommentId_whenRequesting_thenSaveNewChildComment() throws Exception {
+        // given
+        long articleId = 1L;
+        ArticleCommentRequest request = ArticleCommentRequest.of(articleId, 1L, "test content");
+        willDoNothing().given(articleCommentService).saveArticleComment(any(ArticleCommentDto.class));
+
+        // when & then
+        mvc.perform(
+                post("/comments/new")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .content(formDataEncoder.encode(request))
+                        .with(csrf())
+                )
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/articles/" + articleId))
+                .andExpect(redirectedUrl("/articles/" + articleId));
+
+        then(articleCommentService).should().saveArticleComment(any(ArticleCommentDto.class));
     }
 }
