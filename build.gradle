@@ -25,9 +25,16 @@ dependencies {
     implementation 'org.springframework.data:spring-data-rest-hal-explorer'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // thymeleaf
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // oauth
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // queryDSL
     implementation 'com.querydsl:querydsl-jpa'
